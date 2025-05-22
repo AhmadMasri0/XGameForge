@@ -9,6 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { allProducts } from "../../data/products";
 import './Arrow.css'
+import { useCart } from "../../contexts/CartContext";
 
 function Arrow(props) {
     const { className, style, onClick } = props;
@@ -16,7 +17,7 @@ function Arrow(props) {
     return (
         <div
             className={className}
-            style={{ ...style, display: "block"}}
+            style={{ ...style, display: "block" }}
             onClick={onClick}
         />
     );
@@ -28,11 +29,12 @@ const ProductDetail = () => {
     const navigate = useNavigate();
     const product = allProducts.find((item) => item.id === parseInt(productId));
     const [quantity, setQuantity] = useState(1);
+    const { addToCart } = useCart();
 
     const handleQuantityChange = (e) => {
         let val = parseInt(e.target.value);
         if (isNaN(val)) val = 1;
-        if (val > 3) val = 3;
+        // if (val > 3) val = 3;
         if (val < 1) val = 1;
         setQuantity(val);
     };
@@ -68,7 +70,7 @@ const ProductDetail = () => {
 
             <Stack direction={{ xs: "column", md: "row" }} sx={{ flexWrap: 'wrap', alignContent: 'center' }} spacing={4}>
                 {/* Image Carousel */}
-                <Box sx={{ width: { xs: "80%", md: 400 }, marginLeft: {xs: '10% !important', sm: '0 !important'} }}>
+                <Box sx={{ width: { xs: "80%", md: 400 }, marginLeft: { xs: '10% !important', sm: '0 !important' } }}>
                     <Slider {...sliderSettings}>
                         {(product.images || [product.images]).map((img, index) => (
                             <Box
@@ -116,6 +118,8 @@ const ProductDetail = () => {
                             size="small"
                             value={quantity}
                             onChange={handleQuantityChange}
+                            min={1}
+                            // max={3}
                             inputProps={{ min: 1, max: 3 }}
                             sx={{ width: 100 }}
                         />
@@ -124,6 +128,7 @@ const ProductDetail = () => {
                             color="primary"
                             startIcon={<AddShoppingCartIcon />}
                             disabled={quantity > 3}
+                            onClick={() => addToCart(product, quantity)}
                         >
                             Add to Cart
                         </Button>

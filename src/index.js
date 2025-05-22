@@ -7,15 +7,21 @@ import { BrowserRouter } from 'react-router-dom';
 import ThemeContextProvider from './contexts/ThemeContext';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeContextProvider>
+    <CartProvider>
+      <AuthProvider>
+        <ThemeContextProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeContextProvider>
+      </AuthProvider>
+    </CartProvider>
   </React.StrictMode>
 );
 

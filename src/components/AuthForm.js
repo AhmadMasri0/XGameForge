@@ -1,66 +1,120 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-    TextField, Button, Typography, Box, Stack,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Stack,
+  IconButton,
+  InputAdornment,
+  Link as MuiLink,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const AuthForm = ({ type, onSubmit, formData, setFormData, errors }) => {
-    const isSignup = type === "signup";
+  const isSignup = type === "signup";
+  const [showPassword, setShowPassword] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-    const isDisabled = Object.values(errors).some(error => error) ||
-        Object.values(formData).some(value => !value);
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
 
-    return (
-        <Box sx={{ maxWidth: 400, mx: "auto", mt: 8, p: 4, boxShadow: 3, borderRadius: 2 }}>
-            <Typography variant="h4" mb={3} align="center">
-                {isSignup ? "Sign Up" : "Login"}
-            </Typography>
-            <Stack spacing={2}>
-                {isSignup && (
-                    <TextField
-                        label="Username"
-                        name="username"
-                        value={formData.username || ""}
-                        onChange={handleChange}
-                        error={!!errors.username}
-                        helperText={errors.username}
-                        fullWidth
-                    />
-                )}
-                <TextField
-                    label="Email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
-                    fullWidth
-                />
-                <TextField
-                    label="Password"
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    error={!!errors.password}
-                    helperText={errors.password}
-                    fullWidth
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onSubmit}
-                    disabled={isDisabled}
-                >
-                    {isSignup ? "Create Account" : "Login"}
-                </Button>
-            </Stack>
-        </Box>
-    );
+  const isDisabled =
+    Object.values(errors).some(error => error) ||
+    Object.values(formData).some(value => !value);
+
+  return (
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 8,
+        p: 4,
+        boxShadow: 3,
+        borderRadius: 2,
+        textAlign: "center",
+      }}
+    >
+      <Typography variant="h4" mb={3}>
+        {isSignup ? "Sign Up" : "Login"}
+      </Typography>
+
+      <Stack spacing={2}>
+        {isSignup && (
+          <TextField
+            label="Username"
+            name="username"
+            value={formData.username || ""}
+            onChange={handleChange}
+            error={!!errors.username}
+            helperText={errors.username}
+            fullWidth
+          />
+        )}
+        <TextField
+          label="Email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          error={!!errors.email}
+          helperText={errors.email}
+          fullWidth
+        />
+        <TextField
+          label="Password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          value={formData.password}
+          onChange={handleChange}
+          error={!!errors.password}
+          helperText={errors.password}
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={togglePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onSubmit}
+          disabled={isDisabled}
+        >
+          {isSignup ? "Create Account" : "Login"}
+        </Button>
+
+        {/* Navigation between auth modes */}
+        <Typography variant="body2">
+          {isSignup ? (
+            <>
+              Already have an account?{" "}
+              <MuiLink component={Link} to="/login" underline="hover">
+                Login
+              </MuiLink>
+            </>
+          ) : (
+            <>
+              Don’t have an account?{" "}
+              <MuiLink component={Link} to="/signup" underline="hover">
+                Sign Up
+              </MuiLink>
+            </>
+          )}
+        </Typography>
+      </Stack>
+    </Box>
+  );
 };
 
 export default AuthForm;

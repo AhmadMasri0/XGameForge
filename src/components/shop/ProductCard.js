@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography, Box, Button, Rating } from "@mui/material";
+import { useCart } from "../../contexts/CartContext";
 
 
-const ProductCard = ({ product }) => (
-    <Card
+const ProductCard = ({ product }) => {
+    const { addToCart } = useCart();
+
+    return <Card
         sx={{
             height: "100%",
             width: { xs: '80%', sm: '250px' },
@@ -48,12 +51,12 @@ const ProductCard = ({ product }) => (
 
         </Link>
         <Box sx={{ p: 2 }}>
-            <Button fullWidth variant="contained" color="secondary">
+            <Button fullWidth variant="contained" color="secondary" onClick={() => addToCart(product)}>
                 Add to Cart
             </Button>
         </Box>
 
     </Card>
-);
+};
 
 export default ProductCard;

@@ -17,7 +17,7 @@ function App() {
       style={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh", // ensures full height
+        minHeight: "100vh", 
       }}
     >
       <Header />
