@@ -15,7 +15,7 @@ const FeaturedGames = () => (
     <Typography variant="h4" gutterBottom textAlign="center">
       🎮 Featured Games
     </Typography>
-    <Grid container spacing={4}>
+    <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center' }}>
       {games.map((game, i) => (
         <Grid item xs={12} sm={6} md={4} key={i}>
           <Card sx={{

@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Create context
 const AuthContext = createContext();
 
-// Auth provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
@@ -27,5 +25,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook for easy access
 export const useAuth = () => useContext(AuthContext);

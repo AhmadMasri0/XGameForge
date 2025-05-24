@@ -11,11 +11,15 @@ const highlights = [
 ];
 
 const CafeHighlights = () => (
-  <Box sx={{ p: 4 }}>
+  <Box sx={{
+    textAlign: "center",
+    py: 6,
+    px: 2,
+  }}>
     <Typography variant="h4" gutterBottom textAlign="center">
       ☕ Café Highlights
     </Typography>
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{display: 'flex', justifyContent: 'center'}}>
       {highlights.map((item, i) => (
         <Grid item xs={12} sm={4} key={i}>
           <Card

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AuthForm from "../components/AuthForm";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const location = useLocation();
     const { login } = useAuth();
+    const redirectTo = new URLSearchParams(location.search).get("redirect") || "/";
 
     useEffect(() => {
         validate();
@@ -35,7 +37,7 @@ const Login = () => {
         if (Object.keys(errors).length === 0) {
             console.log("Logging in with:", formData);
             login(formData);
-            navigate("/");
+            navigate(redirectTo, { replace: true });
         }
     };
 

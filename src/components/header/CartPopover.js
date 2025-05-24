@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
     const open = Boolean(anchorEl);
     const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2);
-
+    // console.log('te')
     return (
         <Popover
             open={open}
