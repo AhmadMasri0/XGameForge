@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography, Box, Button, Rating } from "@mui/material";
 import { useCart } from "../../contexts/CartContext";
+import { API_URL } from "../../api/axios";
 
 
 const ProductCard = ({ product }) => {
@@ -8,7 +9,7 @@ const ProductCard = ({ product }) => {
 
     return <Card
         sx={{
-            height: "100%",
+            height: "auto",
             width: { xs: '80%', sm: '250px' },
             maxWidth: '250px',
             display: "flex",
@@ -20,12 +21,12 @@ const ProductCard = ({ product }) => {
             },
         }}
     >
-        <Link to={`/shop/${product.id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/products/${product._id}`} style={{ textDecoration: 'none' }}>
 
             <CardMedia
                 component="img"
                 height="200"
-                image={product.images[0]}
+                image={API_URL + product.images[0]['url']}
                 alt={product.name}
             />
             <CardContent sx={{ flexGrow: 1 }}>
@@ -52,9 +53,10 @@ const ProductCard = ({ product }) => {
 
         </Link>
         <Box sx={{ p: 2 }}>
-            <Button fullWidth variant="contained" color="secondary" onClick={() => addToCart(product)}>
+            <Button fullWidth variant="contained" color="secondary" onClick={() => addToCart(product)} disabled={product.amount < 1}>
                 Add to Cart
             </Button>
+            {product.amount < 1 && <span style={{color: 'red', fontSize: '12px'}}>out of stock</span>}
         </Box>
 
     </Card>

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import AuthForm from "../components/AuthForm";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const Signup = () => {
     const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
-    const { login } = useAuth();
+    const { signup } = useAuth();
+    const [submitError, setSubmitError] = useState('');
 
     useEffect(() => {
         validate();
@@ -35,13 +34,13 @@ const Signup = () => {
         setErrors(newErrors);
     };
 
-    const handleSignup = () => {
+    const handleSignup = async () => {
         validate();
         if (Object.keys(errors).length === 0) {
-            login(formData);
-            navigate("/");
+            setSubmitError(signup(formData));
         }
     };
+
 
     return (
         <AuthForm
@@ -50,6 +49,8 @@ const Signup = () => {
             setFormData={setFormData}
             onSubmit={handleSignup}
             errors={errors}
+            submitError={submitError}
+
         />
     );
 };

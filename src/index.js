@@ -13,15 +13,15 @@ import { CartProvider } from './contexts/CartContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CartProvider>
+    <BrowserRouter>
       <AuthProvider>
-        <ThemeContextProvider>
-          <BrowserRouter>
+        <CartProvider>
+          <ThemeContextProvider>
             <App />
-          </BrowserRouter>
-        </ThemeContextProvider>
+          </ThemeContextProvider>
+        </CartProvider>
       </AuthProvider>
-    </CartProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

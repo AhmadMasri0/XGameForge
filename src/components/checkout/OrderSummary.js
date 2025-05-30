@@ -4,13 +4,14 @@ import {
 } from "@mui/material";
 import { useCart } from "../../contexts/CartContext";
 import { useState } from "react";
+import api, { API_URL } from "../../api/axios";
 
 const OrderSummery = () => {
     const { cartItems } = useCart();
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
     const shipping = subtotal > 0 ? 5.0 : 0;
-    const tax = (subtotal ) * 0.1;
-    const total = subtotal  + tax + shipping;
+    const tax = (subtotal) * 0.1;
+    const total = subtotal + tax + shipping;
 
     const fmt = (num) => new Intl.NumberFormat('en-US', {
         style: 'currency', currency: 'USD'
@@ -35,16 +36,16 @@ const OrderSummery = () => {
                                     <TableCell>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <img
-                                                src={item.images[0]}
-                                                alt={item.name}
+                                                src={`${API_URL}${item.product.images[0].url}`}
+                                                alt={item.product.name}
                                                 style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }}
                                             />
-                                            <Typography variant="body2">{item.name}</Typography>
+                                            <Typography variant="body2">{item.product.name}</Typography>
                                         </Box>
                                     </TableCell>
                                     <TableCell align="right">{item.quantity}</TableCell>
                                     <TableCell align="right">
-                                        {fmt(item.price * item.quantity)}
+                                        {fmt(item.product.price * item.quantity)}
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -52,7 +53,7 @@ const OrderSummery = () => {
                                 <TableCell colSpan={2}><strong>Subtotal</strong></TableCell>
                                 <TableCell align="right"><strong>{fmt(subtotal)}</strong></TableCell>
                             </TableRow>
-                             <TableRow>
+                            <TableRow>
                                 <TableCell colSpan={2}>Shipping</TableCell>
                                 <TableCell align="right">{fmt(shipping)}</TableCell>
                             </TableRow>

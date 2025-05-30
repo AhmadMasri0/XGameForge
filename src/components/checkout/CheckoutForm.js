@@ -6,10 +6,11 @@ import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
+import api from "../../api/axios";
 
 const CheckoutForm = ({ }) => {
 
-    const { clearCart } = useCart();
+    const { clearCart, cartItems } = useCart();
 
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,53 +27,87 @@ const CheckoutForm = ({ }) => {
 
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const shipping = subtotal > 0 ? 5.0 : 0;
+    const tax = (subtotal) * 0.1;
+    const total = subtotal + tax + shipping;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError('');
 
-        if (!fullName || !email) {
+        if (!stripe || !elements) return;
+
+        if (!fullName || !email || !phone || !address || !city || !zip || !selectedMethod) {
             setError('Please fill out all required fields.');
             return;
         }
 
-        if (selectedMethod === 'payOnArrival') {
-            console.log('555')
-            clearCart();
-            navigate('/thank-you');
+        if (selectedMethod === 'cod') {
+            await api.post("/api/orders", {
+                cartItems,
+                status: 'unpaid',
+                orderDetail: {
+                    fullName,
+                    email,
+                    phone,
+                    address,
+                    city,
+                    zip,
+                    notes,
+                },
+                paymentMethod: "Cash",
+                totalAmount: total
+            });
+            navigate("/thank-you");//, { state: { fromPayment: true } });
             return;
         }
 
-        if (!stripe || !elements) {
-            return;
-        }
         setIsLoading(true);
 
         try {
-            const { error: stripeError } = await stripe.confirmPayment(
-                {
-                    elements,
-                    confirmParams: { return_url: window.location.origin + '/thank-you' }
-                },
-                { redirect: 'if_required' }
-            );
 
-            if (stripeError) {
-                setError(stripeError.message || 'Payment failed.');
-                setIsLoading(false);
-            } else {
-                console.log('test')
-                clearCart();
-                navigate('/thank-you');
+            const result = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                },
+                redirect: 'if_required'
+            });
+
+            if (result.error) {
+                console.log(result.error)
+                setError(result.error.message);
+            } else if (result.paymentIntent.status === "succeeded") {
+                await api.post("/api/orders", {
+                    cartItems,
+                    status: 'paid',
+                    orderDetail: {
+                        fullName,
+                        email,
+                        phone,
+                        address,
+                        city,
+                        zip,
+                        notes,
+                    },
+                    paymentIntentId: result.paymentIntent.id,
+                    paymentMethod: "stripe",
+                    totalAmount: total
+                });
+                navigate("/thank-you");
             }
+
         } catch (err) {
-            setError(err.message);
-            setIsLoading(false);
+            console.error(err);
+            setError("Payment failed. Please try again.");
         }
+
+        setIsLoading(false);
     };
+
     return <Paper sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>Shipping Information</Typography>
-        {/* {isLoading && <Button>Loadding...</Button>} */}
+        {isLoading && <Button>Loadding...</Button>}
         <form onSubmit={handleSubmit} noValidate>
             <TextField
                 fullWidth required label="Full Name"
@@ -125,7 +160,7 @@ const CheckoutForm = ({ }) => {
             <Divider sx={{ my: 2 }} />
 
             <FormControl component="fieldset" margin="normal" >
-                <FormLabel component="legend" sx={{color: 'black'}}>Payment Method</FormLabel>
+                <FormLabel component="legend" sx={{ color: 'black' }}>Payment Method</FormLabel>
                 {!selectedMethod && (
                     <Typography variant="caption" color="error">
                         Please select a payment method
@@ -180,7 +215,7 @@ const CheckoutForm = ({ }) => {
                 </Box>
             )}
             <Button
-                type="submit" variant="contained" color="primary"
+                type="submit" variant="contained" color="primary" onClick={handleSubmit}
                 sx={{ mt: 3 }}
                 disabled={
                     !fullName || !email || !phone || !address || !city || !zip || !selectedMethod

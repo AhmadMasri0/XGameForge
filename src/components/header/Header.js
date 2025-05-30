@@ -86,7 +86,8 @@ const Header = () => {
                             }}
                         >
                             {navItems.map((item, index) => {
-                                return <><Button
+                                return <>
+                                    <Button
                                     key={item.name}
                                     component={Link}
                                     to={item.path}
@@ -98,7 +99,8 @@ const Header = () => {
                                 >
                                     {item.name}
                                 </Button>
-                                    {index === 4 && <IconButton
+                                {
+                                    index === 4 && <IconButton
                                         color="inherit"
                                         onMouseEnter={handleCartHover}
                                         sx={{ position: "relative", marginLeft: 2 }}
@@ -106,26 +108,27 @@ const Header = () => {
                                         <Badge badgeContent={cartItems.length || '0'} color="secondary">
                                             <ShoppingCartIcon />
                                         </Badge>
-                                    </IconButton>}
+                                    </IconButton>
+                                }
                                 </>
 
                             })}
 
 
-                            <CartPopover anchorEl={anchorEl} onClose={handleCartClose} cartItems={cartItems} removeItem={removeFromCart} />
-                        </Box>
-
-                        <IconButton
-                            color="inherit"
-                            edge="end"
-                            sx={{ display: { sm: "none" } }}
-                            onClick={toggleDrawer}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+                        <CartPopover anchorEl={anchorEl} onClose={handleCartClose} cartItems={cartItems} removeItem={removeFromCart} />
                     </Box>
-                </Toolbar>
-            </AppBar>
+
+                    <IconButton
+                        color="inherit"
+                        edge="end"
+                        sx={{ display: { sm: "none" } }}
+                        onClick={toggleDrawer}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Box>
+            </Toolbar>
+        </AppBar >
 
             <MobileDrawer navItems={navItems} cartItems={cartItems} toggleDrawer={toggleDrawer} mobileOpen={mobileOpen} />
         </>

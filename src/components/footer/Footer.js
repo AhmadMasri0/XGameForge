@@ -35,7 +35,7 @@ const Footer = () => {
           {/* Navigation */}
           <Grid item xs={12} sm={6} md={2} textAlign={isMobile ? "center" : "left"}
             sx={{ width: { xs: '100%', sm: 'inherit' }, flexDirection: { xs: 'row', sm: 'column' } }}>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
               Pages
             </Typography>
             {["Home", "Booking", "Shop", "Café", "About"].map((page) => (
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Contact & Social */}
           <Grid item xs={12} sm={6} md={3} textAlign={isMobile ? "center" : "left"}>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
               Connect
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -80,8 +80,8 @@ const Footer = () => {
 
           {/* Location & Hours */}
           <Grid item xs={12} sm={6} md={4} textAlign={isMobile ? "center" : "left"}>
-            <Typography variant="subtitle1" gutterBottom>
-              Visit Us
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
+              Visit us
             </Typography>
             <Typography variant="body2" color="text.secondary">
               📍Rafidia Street, Nablus

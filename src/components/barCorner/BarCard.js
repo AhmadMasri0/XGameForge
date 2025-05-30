@@ -1,9 +1,13 @@
 import { Box, Button, Card, CardContent, CardMedia, Chip, Stack, Typography } from "@mui/material";
+import { useAuth } from "../../contexts/AuthContext";
+import { API_URL } from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 
-const BarCard = ({ item }) => {
+
+const BarCard = ({ item, icon, deleteBarItem }) => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     return <Card
         sx={{
@@ -22,11 +26,11 @@ const BarCard = ({ item }) => {
     >
         <CardMedia
             component="img"
-            image={item.image}
+            image={API_URL + item.image}
             alt={item.name}
             sx={{
                 height: 160,
-                // objectFit: "cover",
+                objectFit: "cover",
             }}
         />
         <CardContent sx={{ flexGrow: 1 }}>
@@ -35,8 +39,8 @@ const BarCard = ({ item }) => {
                     {item.name}
                 </Typography>
                 <Chip
-                    label={item.type}
-                    icon={item.type === "Food" ? <RestaurantMenuIcon /> : <LocalCafeIcon />}
+                    label={item.Category}
+                    icon={icon}
                     size="small"
                     color="primary"
                 />
@@ -45,11 +49,15 @@ const BarCard = ({ item }) => {
                 {item.description}
             </Typography>
         </CardContent>
-        <Box sx={{ px: 2, pb: 2 }}>
-            <Button variant="contained" color="secondary" fullWidth>
-                Order Now
-            </Button>
-        </Box>
+        {user.isAdmin &&
+            <Box sx={{ px: 2, pb: 2 }}>
+                <Button variant="contained" color="info" sx={{ marginBottom: '5px' }} fullWidth onClick={() => navigate('/bar/edit/' + item._id)}>
+                    Edit item
+                </Button>
+                <Button variant="contained" color="secondary" fullWidth onClick={() => deleteBarItem(item._id)}>
+                    Remove item
+                </Button>
+            </Box>}
     </Card>
 }
 

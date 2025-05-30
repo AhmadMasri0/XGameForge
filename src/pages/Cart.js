@@ -9,7 +9,6 @@ import {
     Divider,
     TextField,
     Stack,
-    // useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -17,22 +16,23 @@ import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useCart } from "../contexts/CartContext";
 import { Link } from "react-router-dom";
+import { API_URL } from "../api/axios";
+
 
 const Cart = () => {
-    // const theme = useTheme();
     const { cartItems, updateQuantity, removeFromCart, clearCart } = useCart();
 
-    const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = cartItems.reduce((acc, item) => acc + +item?.product?.price * +item?.quantity, 0);
     const tax = +(subtotal * 0.1).toFixed(2);
     const total = subtotal + tax;
-
+    console.log(cartItems)
     return (
-        <Box sx={{ px: { xs: 2, md: 4 }, py: { xs: 4, md: 6 }, maxWidth: "1200px", mx: "auto" , justifyContent: 'center'}}>
+        <Box sx={{ px: { xs: 2, md: 4 }, py: { xs: 4, md: 6 }, maxWidth: "1200px", mx: "auto", justifyContent: 'center' }}>
             <Typography variant="h4" fontWeight={700} gutterBottom>
                 Your Cart
             </Typography>
 
-            {cartItems.length === 0 ? (
+            {cartItems?.length === 0 ? (
                 <Paper sx={{ mt: 4, p: 4, textAlign: "center" }}>
                     <Typography variant="h6" gutterBottom>
                         Your cart is currently empty.
@@ -42,11 +42,11 @@ const Cart = () => {
                     </Button>
                 </Paper>
             ) : (
-                <Grid container spacing={4} sx={{justifyContent: 'center'}}>
+                <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
                     <Grid item xs={12} md={8}>
-                        {cartItems.map((item) => (
+                        {cartItems?.map((item) => (
                             <Paper
-                                key={item.id}
+                                key={item?.product?._id}
                                 sx={{
                                     mb: 2,
                                     p: 2,
@@ -59,8 +59,8 @@ const Cart = () => {
                             >
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <img
-                                        src={item.images[0]}
-                                        alt={item.name}
+                                        src={`${API_URL}${item?.product?.images && item?.product?.images[0].url}`}
+                                        alt={item?.product?.name}
                                         style={{
                                             width: 80,
                                             height: 80,
@@ -70,10 +70,10 @@ const Cart = () => {
                                     />
                                     <Box>
                                         <Typography variant="subtitle1" fontWeight={600}>
-                                            {item.name}
+                                            {item?.product?.name}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            {item.platform} | ${item.price}
+                                            {item?.product?.platform} | ${item?.product?.price}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -81,7 +81,7 @@ const Cart = () => {
                                 <Stack direction="row" alignItems="center" spacing={1}>
                                     <IconButton
                                         onClick={() =>
-                                            updateQuantity(item, Math.max(1, item.quantity - 1))
+                                            updateQuantity(item?.product?._id, Math.max(1, item.quantity - 1))
                                         }
                                         disabled={item.quantity <= 1}
                                     >
@@ -97,7 +97,7 @@ const Cart = () => {
                                                 1,
                                                 Math.min(3, parseInt(e.target.value))
                                             );
-                                            updateQuantity(item, value);
+                                            updateQuantity(item?.product?._id, value);
                                         }}
                                         inputProps={{
                                             min: 1,
@@ -109,7 +109,7 @@ const Cart = () => {
 
                                     <IconButton
                                         onClick={() =>
-                                            updateQuantity(item, Math.min(3, item.quantity + 1))
+                                            updateQuantity(item?.product?._id, Math.min(3, item.quantity + 1))
                                         }
                                         disabled={item.quantity >= 3}
                                     >
@@ -118,7 +118,7 @@ const Cart = () => {
 
                                     <IconButton
                                         color="error"
-                                        onClick={() => removeFromCart(item.id)}
+                                        onClick={() => removeFromCart(item?.product?._id)}
                                     >
                                         <DeleteIcon />
                                     </IconButton>

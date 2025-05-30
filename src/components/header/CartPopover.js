@@ -12,11 +12,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../api/axios";
 
 const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
     const open = Boolean(anchorEl);
-    const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2);
-    // console.log('te')
+    const total = cartItems.reduce((sum, item) => sum + +item?.product?.price * +item?.quantity, 0).toFixed(2);
+
     return (
         <Popover
             open={open}
@@ -37,32 +38,32 @@ const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
 
-                {cartItems.length === 0 ? (
+                {cartItems?.length === 0 ? (
                     <Typography variant="body2">Your cart is empty.</Typography>
                 ) : (
                     <List dense>
-                        {cartItems.map((item) => (
-                            <ListItem key={item.id} disableGutters>
+                        {cartItems?.map((item) => (
+                            <ListItem key={item?.product?.id} disableGutters>
                                 <ListItemAvatar>
                                     <Avatar
                                         variant="rounded"
-                                        src={item.images?.[0]}
-                                        alt={item.title}
+                                        src={`${API_URL}${item?.product?.images?.[0].url}`}
+                                        alt={item?.product?.title}
                                         sx={{ width: 48, height: 48 }}
                                     />
                                 </ListItemAvatar>
                                 <Box sx={{ ml: 2, flexGrow: 1 }}>
                                     <Typography variant="subtitle2" noWrap>
-                                        {item.name}
+                                        {item?.product?.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Qty: {item.quantity} × ${item.price.toFixed(2)}
+                                        Qty: {item.quantity} × ${item?.product?.price?.toFixed(2)}
                                     </Typography>
                                 </Box>
                                 <IconButton
                                     edge="end"
                                     size="small"
-                                    onClick={() => removeItem(item.id)}
+                                    onClick={() => removeItem(item.product._id)}
                                     sx={{ ml: "auto" }}
                                 >
                                     <DeleteIcon fontSize="small" />

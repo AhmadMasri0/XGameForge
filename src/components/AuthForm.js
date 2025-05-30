@@ -12,7 +12,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const AuthForm = ({ type, onSubmit, formData, setFormData, errors }) => {
+const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }) => {
   const isSignup = type === "signup";
   const [showPassword, setShowPassword] = useState(false);
 
@@ -85,6 +85,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors }) => {
             ),
           }}
         />
+        {submitError && <span style={{color: "red", fontSize: '13px'}}>{submitError}</span>}
         <Button
           variant="contained"
           color="primary"

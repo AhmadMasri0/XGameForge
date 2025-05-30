@@ -1,15 +1,80 @@
 import {
-    Container, Typography, Grid, Card, CardMedia, CardContent,
-    Button, Box, Chip, Divider, Paper, Stack,
+    Container, Typography, Grid,
+    Button, Box, Divider, Paper, Stack,
 } from "@mui/material";
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import LocalCafeIcon from '@mui/icons-material/LocalCafe';
-import { menuItems } from "../data/menuItems";
-import BarCard from "../components/barcrner/BarCard";
+import BarCard from '../components/barCorner/BarCard'
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
+
+import {
+    LocalCafe,
+    Fastfood,
+    LocalBar,
+    Restaurant,
+    Category
+} from '@mui/icons-material';
+
+const icons = {
+    Beverage: <LocalCafe />,
+    Snack: <Fastfood />,
+    Cocktail: <LocalBar />,
+    Meal: <Restaurant />,
+    Other: <Category />,
+};
+const categories = ['Beverage', 'Snack', 'Cocktail', 'Meal', 'Other'];
 
 const BarCorner = () => {
-    const drinks = menuItems.filter((item) => item.type === "Drink");
-    const foods = menuItems.filter((item) => item.type === "Food");
+
+    const [menuItems, setMenuItems] = useState([]);
+    const [displayedItems, setDisplayedItems] = useState({});
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        for (let cat of menuItems) {
+            const category = cat.category;
+            setDisplayedItems(
+                (pre) => {
+                    const temp = { ...pre };
+                    temp[category] = menuItems?.filter((item) => item.category === category);
+                    return temp
+                })
+        }
+    }, [menuItems]);
+
+
+    useEffect(() => {
+        const fetchBarItems = async () => {
+            try {
+                const res = await api.get('/api/bar', {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                setMenuItems(res.data)
+            } catch (error) {
+                console.error(error);
+                alert('Failed to add bar item');
+            }
+        }
+        fetchBarItems();
+    }, []);
+
+
+
+    const deleteBarItem = async (id) => {
+        const isConfirmed = window.confirm('Are you sure you want to delete this item?');
+        if (!isConfirmed)
+            return;
+        try {
+            await api.delete(`/api/bar/${id}`);
+            alert('Item deleted successfully');
+            navigate('/')
+        } catch (err) {
+            console.error('Failed to delete the item:', err);
+            alert('Failed to delete the item');
+        }
+    }
 
     const renderMenuSection = (title, icon, items) => (
         <Box sx={{ my: 6 }}>
@@ -17,8 +82,8 @@ const BarCorner = () => {
                 {icon} {title}
             </Typography>
             <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
-                {items.map((item) => (
-                    <BarCard item={item} />
+                {items?.map((item) => (
+                    <BarCard item={item} icon={icon} deleteBarItem={deleteBarItem} />
                 ))}
             </Grid>
 
@@ -37,9 +102,19 @@ const BarCorner = () => {
             </Paper>
 
             <Divider sx={{ mb: 4 }} />
+            {user?.isAdmin && <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
+                <Button
+                    variant="contained"
+                    onClick={() => navigate("/bar/create")}
+                    sx={{ mb: 2 }}
+                >
+                    Add Item
+                </Button>
+            </Container>}
+            {categories.map((item, i) => {
+                return renderMenuSection(item, icons[item], displayedItems[item])
+            })}
 
-            {renderMenuSection("Drinks", <LocalCafeIcon sx={{ mr: 1 }} />, drinks)}
-            {renderMenuSection("Foods", <RestaurantMenuIcon sx={{ mr: 1 }} />, foods)}
         </Container>
     );
 };

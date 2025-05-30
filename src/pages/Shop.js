@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import {
-    Container, Typography, Box,
-    Divider, Grid, Pagination, Stack,
+    Container, Typography, Box, Divider, Grid,
+    Pagination, Stack, CircularProgress, Button
 } from "@mui/material";
 import ProductFilter from "../components/shop/ProductFilter";
 import ProductGrid from "../components/shop/ProductGrid";
-import { allProducts } from "../data/products";
+import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-const PRODUCTS_PER_PAGE = 8;
+const PRODUCTS_PER_PAGE = 10;
 
 const Shop = () => {
     const [filters, setFilters] = useState({
@@ -19,12 +21,38 @@ const Shop = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [page, setPage] = useState(1);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const { user } = useAuth();
 
-    // Debounce logic
     useEffect(() => {
-        const handler = setTimeout(() => setDebouncedQuery(searchQuery), 400);
+        const handler = setTimeout(() => {
+            setDebouncedQuery(searchQuery);
+        }, 400);
         return () => clearTimeout(handler);
     }, [searchQuery]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await api.get("/api/products/search", {
+                    params: { q: debouncedQuery || "" }
+                });
+                setProducts(res.data);
+            } catch (err) {
+                console.error("Failed to fetch products", err);
+                setError("Failed to load products.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [debouncedQuery]);
 
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
@@ -36,25 +64,18 @@ const Shop = () => {
         setPage(1);
     };
 
-    // Filtering
-    const filteredProducts = allProducts.filter((product) => {
+    const filteredProducts = products.filter((product) => {
         const matchesCategory = filters.category ? product.category === filters.category : true;
         const matchesPlatform = filters.platform ? product.platform === filters.platform : true;
-        const matchesSearch = debouncedQuery
-            ? product.name.toLowerCase().includes(debouncedQuery.toLowerCase())
-            : true;
-
-        return matchesCategory && matchesPlatform && matchesSearch;
+        return matchesCategory && matchesPlatform;
     });
 
-    // Sorting
     const sortedProducts = [...filteredProducts].sort((a, b) => {
         if (filters.price === "low") return a.price - b.price;
         if (filters.price === "high") return b.price - a.price;
         return 0;
     });
 
-    // Pagination
     const pageCount = Math.ceil(sortedProducts.length / PRODUCTS_PER_PAGE);
     const paginatedProducts = sortedProducts.slice(
         (page - 1) * PRODUCTS_PER_PAGE,
@@ -81,16 +102,43 @@ const Shop = () => {
 
                     <Divider sx={{ mb: 4 }} />
 
+                    {user?.isAdmin && (
+                        <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
+                            <Button
+                                variant="contained"
+                                onClick={() => navigate("/products/create")}
+                                sx={{ mb: 2 }}
+                            >
+                                Add product
+                            </Button>
+                        </Container>
+                    )}
 
+                    <ProductFilter
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        searchQuery={searchQuery}
+                        handleSearchChange={handleSearchChange}
+                    />
 
-                    <ProductFilter filters={filters} onFilterChange={handleFilterChange}
-                        searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
-
-                    {paginatedProducts.length > 0 ? (
+                    {loading ? (
+                        <Stack alignItems="center" sx={{ mt: 6 }}>
+                            <CircularProgress />
+                        </Stack>
+                    ) : error ? (
+                        <Typography color="error" textAlign="center" sx={{ mt: 4 }}>
+                            {error}
+                        </Typography>
+                    ) : paginatedProducts.length > 0 ? (
                         <>
                             <ProductGrid products={paginatedProducts} />
                             <Stack alignItems="center" sx={{ mt: 4 }}>
-                                <Pagination count={pageCount} page={page} onChange={handlePageChange} color="primary" />
+                                <Pagination
+                                    count={pageCount}
+                                    page={page}
+                                    onChange={handlePageChange}
+                                    color="primary"
+                                />
                             </Stack>
                         </>
                     ) : (
