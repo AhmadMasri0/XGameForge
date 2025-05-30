@@ -1,6 +1,7 @@
 import {
-    Accordion, AccordionSummary, AccordionDetails,
-    Typography, Button, Box, Chip
+    Accordion, AccordionSummary, AccordionDetails, Typography, Button,
+    Box, Chip, TextField, MenuItem, Select, Pagination,
+    Container
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
@@ -8,11 +9,38 @@ import api from "../../api/axios";
 
 const AllOrders = () => {
     const [orders, setOrders] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [status, setStatus] = useState(""); // status filter
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    // Debounce the search input
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(searchTerm.trim());
+            setPage(1); // reset page on new search
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [searchTerm]);
 
     const fetchOrders = async () => {
         try {
-            const res = await api.get("/api/orders/admin");
-            setOrders(res.data);
+            let tmpQuery = {};
+            if (status.includes('paid') || status.includes('cancelled')) {
+                tmpQuery['status'] = status;
+            } else if (status.includes('delivered')) {
+                tmpQuery['isDelivered'] = status === 'delivered';
+            }
+            const query = new URLSearchParams({
+                search: debouncedSearch,
+                ...tmpQuery,
+                page
+            });
+
+            const res = await api.get(`/api/orders/admin?${query}`);
+            setOrders(res.data.orders);
+            setTotalPages(res.data.totalPages || 1);
         } catch (err) {
             console.error("Failed to fetch orders", err);
         }
@@ -27,20 +55,61 @@ const AllOrders = () => {
         }
     };
 
+
+    const handleCancel = async (orderId) => {
+        if (!window.confirm("Are you sure you want to cancel this order?")) return;
+
+        try {
+            await api.put(`/api/orders/cancelOrder/${orderId}`);
+            fetchOrders(); // Refresh orders after cancel
+        } catch (err) {
+            console.error("Failed to cancel order:", err);
+            alert("Could not cancel order.");
+        }
+    };
+
+
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, [debouncedSearch, status, page]);
 
     return (
         <Box sx={{ maxWidth: 900, mx: "auto", mt: 4 }}>
-            <Typography variant="h4" mb={3}>All Orders</Typography>
+            <Typography variant="h4" mb={2}>All Orders</Typography>
+
+            <TextField
+                label="Search by Order ID or Email"
+                fullWidth
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                sx={{ mb: 2 }}
+            />
+
+            <Select
+                value={status}
+                onChange={(e) => { setStatus(e.target.value); setPage(1); }}
+                displayEmpty
+                fullWidth
+                sx={{ mb: 3 }}
+            >
+                <MenuItem value="">All Statuses</MenuItem>
+                <MenuItem value="paid">Paid</MenuItem>
+                <MenuItem value="unpaid">Unpaid</MenuItem>
+                <MenuItem value="undelivered">Undelivered</MenuItem>
+                <MenuItem value="delivered">Delivered</MenuItem>
+                <MenuItem value="cancelled">Cancelled</MenuItem>
+            </Select>
+
             {orders.map(order => (
                 <Accordion key={order._id}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography sx={{ flexGrow: 1 }}>
                             #{order._id.slice(-6).toUpperCase()} - {order.user?.name} ({order.status})
                         </Typography>
-                        <Chip label={order.isDelivered ? 'Delivered' : 'Not delivered yet'} color={order.isDelivered ? "success" : "warning"} />
+                        <Chip
+                            label={order.isDelivered ? 'Delivered' : 'Not delivered yet'}
+                            color={order.isDelivered ? "success" : "warning"}
+                        />
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography><strong>Email:</strong> {order.orderDetail.email}</Typography>
@@ -53,19 +122,42 @@ const AllOrders = () => {
                                 {item.product.name} - x{item.quantity}
                             </Typography>
                         ))}
-                        {!order.isDelivered && (
-                            <Button
-                                variant="contained"
-                                color="success"
-                                onClick={() => handleMarkAsDelivered(order._id)}
-                                sx={{ mt: 2 }}
-                            >
-                                Mark as Delivered
-                            </Button>
-                        )}
+                        <Container sx={{display: 'flex', gap: 2}}>
+                            {!order.isDelivered && order.status !== 'cancelled' && (
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    onClick={() => handleMarkAsDelivered(order._id)}
+                                    sx={{ mt: 2 }}
+                                >
+                                    Mark as Delivered
+                                </Button>
+                            )}
+                            {!order.isDelivered && order.status !== "cancelled" && (
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    sx={{ mt: 2 }}
+                                    onClick={() => handleCancel(order._id)}
+                                >
+                                    Cancel Order
+                                </Button>
+                            )}
+                        </Container>
                     </AccordionDetails>
                 </Accordion>
             ))}
+
+            {totalPages > 1 && (
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+                    <Pagination
+                        count={totalPages}
+                        page={page}
+                        onChange={(_, value) => setPage(value)}
+                        color="primary"
+                    />
+                </Box>
+            )}
         </Box>
     );
 };
