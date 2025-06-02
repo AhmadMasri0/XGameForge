@@ -5,12 +5,8 @@ import { useAuth } from "../contexts/AuthContext";
 const Signup = () => {
     const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const { signup } = useAuth();
+    const { signup, signupMessage } = useAuth();
     const [submitError, setSubmitError] = useState('');
-
-    useEffect(() => {
-        validate();
-    }, [formData]);
 
     const validate = () => {
         const newErrors = {};
@@ -33,6 +29,10 @@ const Signup = () => {
 
         setErrors(newErrors);
     };
+    useEffect(() => {
+        validate();
+    }, [formData,]);
+
 
     const handleSignup = async () => {
         validate();
@@ -50,7 +50,7 @@ const Signup = () => {
             onSubmit={handleSignup}
             errors={errors}
             submitError={submitError}
-
+            signupMessage={signupMessage}
         />
     );
 };

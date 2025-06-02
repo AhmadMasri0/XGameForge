@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-    Container, Typography, Grid, Paper, TextField, Button, Divider, Tabs, Tab, Box
+    Container, Typography, Paper, Tabs, Tab,
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
-import api from '../api/axios';
 import ChangePasswordForm from '../components/profile/ChangePassword';
 import EditProfileForm from '../components/profile/EdttProfile';
 import ViewOrders from '../components/profile/ViewOrders';
@@ -23,7 +22,7 @@ const UserProfile = () => {
                 <Typography variant="h5" gutterBottom>
                     My Profile
                 </Typography>
-                <Tabs
+                <Tabs textColor='primary'
                     value={tab}
                     onChange={handleTabChange}
                     variant="scrollable"

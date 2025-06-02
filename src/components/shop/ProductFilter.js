@@ -1,4 +1,3 @@
-// ProductFilter.js
 import React from "react";
 import {
     Box,
@@ -43,8 +42,10 @@ const ProductFilter = ({ filters, onFilterChange, searchQuery, handleSearchChang
                             onChange={handleChange("category")}
                         >
                             <MenuItem value="">All</MenuItem>
-                            <MenuItem value="Games">Games</MenuItem>
-                            <MenuItem value="Accessories">Accessories</MenuItem>
+                            <MenuItem value="Game">Games</MenuItem>
+                            <MenuItem value="Accessory">Accessories</MenuItem>
+                            <MenuItem value="Console">Consoles</MenuItem>
+                            <MenuItem value="Other">Others</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -61,7 +62,8 @@ const ProductFilter = ({ filters, onFilterChange, searchQuery, handleSearchChang
                             <MenuItem value="">All</MenuItem>
                             <MenuItem value="PS5">PS5</MenuItem>
                             <MenuItem value="PC">PC</MenuItem>
-                            <MenuItem value="Xbox">Xbox</MenuItem>
+                            <MenuItem value="XBox">Xbox</MenuItem>
+                            <MenuItem value="Other">Others</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

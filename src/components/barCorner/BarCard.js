@@ -13,7 +13,7 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
         sx={{
             width: { xs: '80%', sm: '250px' },
             maxWidth: '250px',
-            height: 350,
+            height: 'auto',
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -24,13 +24,14 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
             },
         }}
     >
+
         <CardMedia
             component="img"
             image={API_URL + item.image}
             alt={item.name}
             sx={{
                 height: 160,
-                objectFit: "cover",
+                objectFit: "contain",
             }}
         />
         <CardContent sx={{ flexGrow: 1 }}>
@@ -49,7 +50,7 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
                 {item.description}
             </Typography>
         </CardContent>
-        {user.isAdmin &&
+        {user?.isAdmin &&
             <Box sx={{ px: 2, pb: 2 }}>
                 <Button variant="contained" color="info" sx={{ marginBottom: '5px' }} fullWidth onClick={() => navigate('/bar/edit/' + item._id)}>
                     Edit item

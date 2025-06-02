@@ -8,7 +8,6 @@ export const CartProvider = ({ children }) => {
     const { isAuthenticated } = useAuth();
     const [cartItems, setCartItems] = useState([]);
 
-    // Load cart on mount
     useEffect(() => {
         const loadCart = async () => {
             if (isAuthenticated) {
@@ -50,7 +49,7 @@ export const CartProvider = ({ children }) => {
         loadCart();
     }, [isAuthenticated]);
 
-    // Sync guest cart to localStorage
+  
     useEffect(() => {
         if (!isAuthenticated) {
             localStorage.setItem("cart", JSON.stringify(cartItems));

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
     Container, Typography, Box, Divider, Grid,
-    Pagination, Stack, CircularProgress, Button
+    Pagination, Stack, CircularProgress, Button,
+    useTheme
 } from "@mui/material";
 import ProductFilter from "../components/shop/ProductFilter";
 import ProductGrid from "../components/shop/ProductGrid";
@@ -26,6 +27,7 @@ const Shop = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { user } = useAuth();
+    const theme = useTheme();
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -105,9 +107,10 @@ const Shop = () => {
                     {user?.isAdmin && (
                         <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
                             <Button
+
                                 variant="contained"
                                 onClick={() => navigate("/products/create")}
-                                sx={{ mb: 2 }}
+                                sx={{ mb: 2, border: theme.palette.mode === 'light' ? '' : '1px solid gray' }}
                             >
                                 Add product
                             </Button>
@@ -120,7 +123,6 @@ const Shop = () => {
                         searchQuery={searchQuery}
                         handleSearchChange={handleSearchChange}
                     />
-
                     {loading ? (
                         <Stack alignItems="center" sx={{ mt: 6 }}>
                             <CircularProgress />
@@ -131,7 +133,9 @@ const Shop = () => {
                         </Typography>
                     ) : paginatedProducts.length > 0 ? (
                         <>
+
                             <ProductGrid products={paginatedProducts} />
+
                             <Stack alignItems="center" sx={{ mt: 4 }}>
                                 <Pagination
                                     count={pageCount}

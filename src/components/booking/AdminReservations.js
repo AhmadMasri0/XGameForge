@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
     Container, Typography, Table, TableHead, TableBody,
     TableRow, TableCell, Paper, TableContainer, Select,
-    MenuItem, FormControl, InputLabel, Pagination, Stack
+    MenuItem, FormControl, InputLabel, Pagination, Stack,
+    TableSortLabel, TextField, Box
 } from "@mui/material";
 import api from "../../api/axios";
 
@@ -11,6 +12,8 @@ const AdminReservations = ({ rerender, setRerender }) => {
     const [filtered, setFiltered] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [sortConfig, setSortConfig] = useState({ key: "date", direction: "asc" });
 
     const BOOKINGS_PER_PAGE = 5;
 
@@ -27,13 +30,42 @@ const AdminReservations = ({ rerender, setRerender }) => {
     }, [rerender]);
 
     useEffect(() => {
-        let list = bookings;
+        let list = [...bookings];
+
         if (statusFilter !== "all") {
-            list = bookings.filter(b => b.status === statusFilter);
+            list = list.filter(b => b.status === statusFilter);
         }
+
+        if (search.trim()) {
+            const s = search.toLowerCase();
+            list = list.filter(
+                b =>
+                    b.user?.username?.toLowerCase().includes(s) ||
+                    b.user?.email?.toLowerCase().includes(s) ||
+                    b.sessionType?.toLowerCase().includes(s)
+            );
+        }
+
+        if (sortConfig.key) {
+            list.sort((a, b) => {
+                const valA = a[sortConfig.key];
+                const valB = b[sortConfig.key];
+                if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
+                if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
+                return 0;
+            });
+        }
+
         setFiltered(list);
         setPage(1);
-    }, [bookings, statusFilter]);
+    }, [bookings, statusFilter, search, sortConfig]);
+
+    const handleSort = (column) => {
+        setSortConfig(prev => ({
+            key: column,
+            direction: prev.key === column && prev.direction === "asc" ? "desc" : "asc"
+        }));
+    };
 
     const paginated = filtered.slice((page - 1) * BOOKINGS_PER_PAGE, page * BOOKINGS_PER_PAGE);
 
@@ -41,32 +73,50 @@ const AdminReservations = ({ rerender, setRerender }) => {
         <Container sx={{ mt: 4 }}>
             <Typography variant="h4" gutterBottom>All Reservations</Typography>
 
-            <FormControl sx={{ my: 2, minWidth: 200 }}>
-                <InputLabel>Status</InputLabel>
-                <Select
-                    value={statusFilter}
-                    label="Status"
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                    <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="upcoming">Upcoming</MenuItem>
-                    <MenuItem value="inprogress">In-progress</MenuItem>
-                    <MenuItem value="completed">Completed</MenuItem>
-                    <MenuItem value="cancelled">Cancelled</MenuItem>
-                </Select>
-            </FormControl>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2, gap: 2, flexWrap: 'wrap' }}>
+                <FormControl sx={{ minWidth: 200 }}>
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                        value={statusFilter}
+                        label="Status"
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                    >
+                        <MenuItem value="all">All</MenuItem>
+                        <MenuItem value="upcoming">Upcoming</MenuItem>
+                        <MenuItem value="inprogress">In-progress</MenuItem>
+                        <MenuItem value="completed">Completed</MenuItem>
+                        <MenuItem value="cancelled">Cancelled</MenuItem>
+                    </Select>
+                </FormControl>
 
-            <TableContainer component={Paper} >
+                <TextField
+                    label="Search by name, email or session type"
+                    variant="outlined"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    sx={{ flex: 1, minWidth: 240 }}
+                />
+            </Box>
+
+            <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
-                        <TableRow >
-                            <TableCell sx={{ textAlign: 'center' }}>User</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>Email</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>Date</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>Start</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>End</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>Session Type</TableCell>
-                            <TableCell sx={{ textAlign: 'center' }}>Status</TableCell>
+                        <TableRow>
+                            {["username", "email", "date", "startTime", "endTime", "sessionType", "status"].map((col, i) => (
+                                <TableCell
+                                    key={i}
+                                    sortDirection={sortConfig.key === col ? sortConfig.direction : false}
+                                    sx={{ textAlign: 'center' }}
+                                >
+                                    <TableSortLabel
+                                        active={sortConfig.key === col}
+                                        direction={sortConfig.key === col ? sortConfig.direction : "asc"}
+                                        onClick={() => handleSort(col)}
+                                    >
+                                        {col.charAt(0).toUpperCase() + col.slice(1)}
+                                    </TableSortLabel>
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -77,7 +127,7 @@ const AdminReservations = ({ rerender, setRerender }) => {
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.date}</TableCell>
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.startTime}</TableCell>
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.endTime}</TableCell>
-                                <TableCell sx={{ textAlign: 'center' }} >{booking.sessionType}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>{booking.sessionType}</TableCell>
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.status}</TableCell>
                             </TableRow>
                         ))}

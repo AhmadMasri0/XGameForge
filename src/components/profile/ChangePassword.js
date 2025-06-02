@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
-    TextField, Button, Typography, Box, Paper
+    TextField, Button, Typography, Box, Paper,
+    useTheme
 } from '@mui/material';
 import api from '../../api/axios';
-import { SetMealRounded } from '@mui/icons-material';
 
 const ChangePasswordForm = () => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -11,7 +11,7 @@ const ChangePasswordForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-
+    const theme = useTheme();
     useEffect(() => {
         if (confirmPassword !== newPassword) {
             setError('New password and confirm passwrd must match.')
@@ -74,8 +74,10 @@ const ChangePasswordForm = () => {
                 />
                 {error && <Typography color="error" mt={1}>{error}</Typography>}
                 {message && <Typography color="success.main" mt={1}>{message}</Typography>}
-                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}
-                    disabled={currentPassword === '' || newPassword === '' || confirmPassword === '' || confirmPassword !== newPassword}>
+                <Button type="submit" variant="contained" fullWidth
+                    sx={{ mt: 2, border: theme.palette.mode === 'light' ? '' : '1px solid gray' }}
+                    disabled={currentPassword === '' || newPassword === '' ||
+                        confirmPassword === '' || confirmPassword !== newPassword}>
                     Update Password
                 </Button>
             </Box>

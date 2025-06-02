@@ -6,6 +6,8 @@ const api = axios.create({
     baseURL: API_URL,
 });
 
+axios.defaults.withCredentials = true;
+
 
 api.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem("user"));

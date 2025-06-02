@@ -1,10 +1,9 @@
 import {
     Grid, Paper, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Typography, Box, TextField, Button
+    TableHead, TableRow, Typography, Box,
 } from "@mui/material";
 import { useCart } from "../../contexts/CartContext";
-import { useState } from "react";
-import api, { API_URL } from "../../api/axios";
+import { API_URL } from "../../api/axios";
 
 const OrderSummery = () => {
     const { cartItems } = useCart();
@@ -17,11 +16,14 @@ const OrderSummery = () => {
         style: 'currency', currency: 'USD'
     }).format(num);
 
+    const calculations = [{ title: 'Subtotal', value: subtotal }, { title: 'Shipping', value: shipping }
+        , { title: 'Tax (10%)', value: tax }, { title: 'Total', value: total }
+    ];
     return (
         <Grid item xs={12} md={4}>
-            <Paper sx={{ p: 3, backgroundColor: '#fafafa' }}>
+            <Paper sx={{ p: 3 }}>
                 <Typography variant="h6" gutterBottom>Order Summary</Typography>
-                <TableContainer>
+                <TableContainer >
                     <Table size="small">
                         <TableHead>
                             <TableRow>
@@ -38,7 +40,7 @@ const OrderSummery = () => {
                                             <img
                                                 src={`${API_URL}${item.product.images[0].url}`}
                                                 alt={item.product.name}
-                                                style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }}
+                                                style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 4 }}
                                             />
                                             <Typography variant="body2">{item.product.name}</Typography>
                                         </Box>
@@ -49,22 +51,14 @@ const OrderSummery = () => {
                                     </TableCell>
                                 </TableRow>
                             ))}
-                            <TableRow>
-                                <TableCell colSpan={2}><strong>Subtotal</strong></TableCell>
-                                <TableCell align="right"><strong>{fmt(subtotal)}</strong></TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2}>Shipping</TableCell>
-                                <TableCell align="right">{fmt(shipping)}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2}>Tax (10%)</TableCell>
-                                <TableCell align="right">{fmt(tax)}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan={2}><strong>Total</strong></TableCell>
-                                <TableCell align="right"><strong>{fmt(total)}</strong></TableCell>
-                            </TableRow>
+                            {
+                                calculations.map((item) => {
+                                    return <TableRow>
+                                        <TableCell colSpan={2}><strong>{item.title}</strong></TableCell>
+                                        <TableCell align="right"><strong>{fmt(item.value)}</strong></TableCell>
+                                    </TableRow>
+                                })
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>

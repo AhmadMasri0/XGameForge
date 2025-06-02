@@ -20,7 +20,7 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                     textDecoration: "none",
                 }}>
                 <img src={logo} alt="logo" style={{ height: 32, marginRight: 8 }} />
-                <Typography variant="h6">XGameForge</Typography>
+                <Typography variant="h6" color={theme.customColors.primary}>XGameForge</Typography>
             </Box>
 
             <List>
@@ -39,9 +39,8 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                         }} />
                     </ListItem> : null
                 ))}
-                {/* <Switch onChange={toggleColorMode} /> */}
-                <ListItem component={Link} to="/cart">
-                    <ListItemText
+                <ListItem component={Link} to="/cart" sx={{ textDecoration: 'none', color: theme.customColors.primary }}>
+                    <ListItemText color=""
                         primary={
                             <>
                                 <ShoppingCartIcon sx={{ verticalAlign: "middle", mr: 1 }} />
@@ -53,7 +52,7 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
 
             </List>
         </Box>
-    </Drawer>;
+    </Drawer >;
 }
 
 export default MobileDrawer;

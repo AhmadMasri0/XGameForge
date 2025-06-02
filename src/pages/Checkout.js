@@ -22,7 +22,6 @@ export default function CheckoutPage() {
 
   const [clientSecret, setClientSecret] = useState(null);
   const { cartItems } = useCart();
-  // console.log(cartItems)
 
   useEffect(() => {
     if (cartItems.length > 0) {

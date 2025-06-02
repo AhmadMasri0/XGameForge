@@ -22,27 +22,26 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4} sx={{ justifyContent: { xs: 'center' } }}>
-          {/* Brand */}
+
           <Grid item xs={12} sm={6} md={3} textAlign={isMobile ? "center" : "left"}>
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               XGameForge
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Unleash your inner gamer. Play. Shop. Chill.
+              Where Gaming Meets Lifestyle
             </Typography>
           </Grid>
 
-          {/* Navigation */}
           <Grid item xs={12} sm={6} md={2} textAlign={isMobile ? "center" : "left"}
             sx={{ width: { xs: '100%', sm: 'inherit' }, flexDirection: { xs: 'row', sm: 'column' } }}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
               Pages
             </Typography>
-            {["Home", "Booking", "Shop", "Café", "About"].map((page) => (
+            {["Home", "Booking", "Shop", "Game Fuel", "About"].map((page) => (
               <Button
                 key={page}
                 component={Link}
-                to={page === "Home" ? "/" : page === "Café" ? "/bar" : `/${page.toLowerCase()}`}
+                to={page === "Home" ? "/" : page === "Game Fuel" ? "/menu" : `/${page.toLowerCase()}`}
                 sx={{
                   display: "block",
                   textTransform: "none",
@@ -54,7 +53,6 @@ const Footer = () => {
             ))}
           </Grid>
 
-          {/* Contact & Social */}
           <Grid item xs={12} sm={6} md={3} textAlign={isMobile ? "center" : "left"}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
               Connect
@@ -78,7 +76,6 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          {/* Location & Hours */}
           <Grid item xs={12} sm={6} md={4} textAlign={isMobile ? "center" : "left"}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
               Visit us
@@ -89,7 +86,6 @@ const Footer = () => {
             <Typography variant="body2" color="text.secondary">
               🕒  7 days a week: 10am – 12am
             </Typography>
-            {/* Embedded Google Map */}
             <Box sx={{ mt: 2, borderRadius: 1, overflow: "hidden", width: "100%" }}>
               <iframe
                 title="XGameForge Location"
@@ -105,7 +101,6 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        {/* Bottom Note */}
         <Box textAlign="center" pt={4}>
           <Typography variant="caption" color="text.secondary">
             © {new Date().getFullYear()} XGameForge. All rights reserved.

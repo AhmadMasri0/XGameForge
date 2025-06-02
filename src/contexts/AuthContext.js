@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [signupMessage, setSignupMessage] = useState('');
 
   const navigate = useNavigate();
   const redirectTo = new URLSearchParams(window.location.search).get("redirect") || "/";
@@ -46,14 +47,15 @@ export const AuthProvider = ({ children }) => {
   const signup = async (formData) => {
     try {
       const response = await api.post("/api/auth/register", formData);
+      const message = response.data.message;
+      setSignupMessage(message);
+      // const { token, user } = response.data;
 
-      const { token, user } = response.data;
+      // setUser({ ...user, token });
+      // localStorage.setItem("user", JSON.stringify({ ...user, token }));
+      // api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      setUser({ ...user, token });
-      localStorage.setItem("user", JSON.stringify({ ...user, token }));
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      navigate(redirectTo, { replace: true });
+      // navigate(redirectTo, { replace: true });
 
     } catch (error) {
       console.error("Signup error:", error);
@@ -73,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated: !!user, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout, signup, isAuthenticated: !!user, setUser, signupMessage }}>
       {children}
     </AuthContext.Provider>
   );

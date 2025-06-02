@@ -1,10 +1,11 @@
 import {
     Accordion, AccordionSummary, AccordionDetails,
-    Typography, Chip, Divider, Box, Stack, Grid, Button
+    Typography, Chip, Divider, Box, Stack, Grid, Button,
+    Container
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import api, { API_URL } from "../../api/axios";
 
 const ViewOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -27,7 +28,7 @@ const ViewOrders = () => {
 
         try {
             await api.put(`/api/orders/cancelOrder/${orderId}`);
-            fetchOrders(); // Refresh orders after cancel
+            fetchOrders();
         } catch (err) {
             console.error("Failed to cancel order:", err);
             alert("Could not cancel order.");
@@ -35,7 +36,9 @@ const ViewOrders = () => {
     };
 
     if (orders.length === 0) {
-        return <Typography>No orders found.</Typography>;
+        return <Typography variant="h5" mt={4} textAlign="center">
+            No orders found
+        </Typography>
     }
 
     return (
@@ -71,7 +74,7 @@ const ViewOrders = () => {
                         </AccordionSummary>
 
                         <AccordionDetails>
-                            {/* Customer Info */}
+
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle2">Customer Info:</Typography>
                                 <Typography>Name: {order.orderDetail.fullName}</Typography>
@@ -85,30 +88,35 @@ const ViewOrders = () => {
 
                             <Divider sx={{ my: 1 }} />
 
-                            {/* Ordered Items */}
                             <Box>
                                 <Typography variant="subtitle2" gutterBottom>
                                     Items:
                                 </Typography>
                                 <Stack spacing={1}>
                                     {order.items.map((item, idx) => (
-                                        <Typography key={idx}>
-                                            {item.product?.name} × {item.quantity} — ${item.product?.price}
-                                        </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} key={idx}>
+                                            <img
+                                                src={`${API_URL}${item?.product?.images[0]?.url}`}
+                                                alt={item.product.name}
+                                                style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 4 }}
+                                            />
+                                            <Typography variant="body2">{item.product?.name} × {item.quantity} — ${item.product?.price}</Typography>
+                                        </Box>
                                     ))}
                                 </Stack>
                             </Box>
 
-                            {/* Cancel Button */}
                             {!order.isDelivered && order.status !== "cancelled" && (
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    sx={{ mt: 2 }}
-                                    onClick={() => handleCancel(order._id)}
-                                >
-                                    Cancel Order
-                                </Button>
+                                <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        sx={{ mt: 2 }}
+                                        onClick={() => handleCancel(order._id)}
+                                    >
+                                        Cancel Order
+                                    </Button>
+                                </Container>
                             )}
                         </AccordionDetails>
                     </Accordion>

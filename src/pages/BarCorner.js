@@ -1,6 +1,6 @@
 import {
     Container, Typography, Grid,
-    Button, Box, Divider, Paper, Stack,
+    Button, Box, Divider, Paper,
 } from "@mui/material";
 import BarCard from '../components/barCorner/BarCard'
 import { useAuth } from "../contexts/AuthContext";
@@ -15,6 +15,7 @@ import {
     Restaurant,
     Category
 } from '@mui/icons-material';
+import MotionFade from "../components/common/MotionFade";
 
 const icons = {
     Beverage: <LocalCafe />,
@@ -51,6 +52,7 @@ const BarCorner = () => {
                 const res = await api.get('/api/bar', {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
+
                 setMenuItems(res.data)
             } catch (error) {
                 console.error(error);
@@ -59,8 +61,6 @@ const BarCorner = () => {
         }
         fetchBarItems();
     }, []);
-
-
 
     const deleteBarItem = async (id) => {
         const isConfirmed = window.confirm('Are you sure you want to delete this item?');
@@ -77,27 +77,28 @@ const BarCorner = () => {
     }
 
     const renderMenuSection = (title, icon, items) => (
-        <Box sx={{ my: 6 }}>
-            <Typography variant="h4" fontWeight={700} gutterBottom>
-                {icon} {title}
-            </Typography>
-            <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
-                {items?.map((item) => (
-                    <BarCard item={item} icon={icon} deleteBarItem={deleteBarItem} />
-                ))}
-            </Grid>
-
-        </Box>
+        <MotionFade>
+            <Box sx={{ my: 6 }}>
+                <Typography variant="h4" fontWeight={700} gutterBottom>
+                    {icon} {title}
+                </Typography>
+                <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
+                    {items?.map((item) => (
+                        <BarCard item={item} icon={icon} deleteBarItem={deleteBarItem} />
+                    ))}
+                </Grid>
+            </Box>
+        </MotionFade>
     );
 
     return (
         <Container maxWidth="lg" sx={{ my: 6 }}>
             <Paper elevation={2} sx={{ p: 4, textAlign: "center", mb: 6 }}>
                 <Typography variant="h3" fontWeight={700} gutterBottom>
-                    🍻 Welcome to the Bar Corner
+                    🍻 GameFuel Station – Where Every Gamer Refuels
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
-                    Grab a snack or drink while you game in style!
+                Take a break, grab a bite, and power through your next session!
                 </Typography>
             </Paper>
 
@@ -111,8 +112,11 @@ const BarCorner = () => {
                     Add Item
                 </Button>
             </Container>}
+
             {categories.map((item, i) => {
-                return renderMenuSection(item, icons[item], displayedItems[item])
+                if (displayedItems[item])
+                    return renderMenuSection(item, icons[item], displayedItems[item]);
+                return null;
             })}
 
         </Container>

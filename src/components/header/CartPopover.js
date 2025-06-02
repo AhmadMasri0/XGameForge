@@ -1,20 +1,13 @@
 import {
-    Box,
-    Typography,
-    IconButton,
-    Popover,
-    Divider,
-    Button,
-    List,
-    ListItem,
-    ListItemAvatar,
-    Avatar,
+    Box, Typography, IconButton, Popover, Divider,
+    Button, List, ListItem, ListItemAvatar, Avatar,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../api/axios";
 
 const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
+    
     const open = Boolean(anchorEl);
     const total = cartItems.reduce((sum, item) => sum + +item?.product?.price * +item?.quantity, 0).toFixed(2);
 
@@ -85,6 +78,7 @@ const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
                                 component={Link}
                                 to="/cart"
                                 variant="outlined"
+                                color=""
                                 size="small"
                                 fullWidth
                                 onClick={onClose}

@@ -1,7 +1,8 @@
 import {
     Accordion, AccordionSummary, AccordionDetails, Typography, Button,
     Box, Chip, TextField, MenuItem, Select, Pagination,
-    Container
+    Container,
+    useTheme
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
@@ -11,15 +12,15 @@ const AllOrders = () => {
     const [orders, setOrders] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [status, setStatus] = useState(""); // status filter
+    const [status, setStatus] = useState("");
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const theme = useTheme();
 
-    // Debounce the search input
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(searchTerm.trim());
-            setPage(1); // reset page on new search
+            setPage(1);
         }, 500);
         return () => clearTimeout(handler);
     }, [searchTerm]);
@@ -61,13 +62,12 @@ const AllOrders = () => {
 
         try {
             await api.put(`/api/orders/cancelOrder/${orderId}`);
-            fetchOrders(); // Refresh orders after cancel
+            fetchOrders(); 
         } catch (err) {
             console.error("Failed to cancel order:", err);
             alert("Could not cancel order.");
         }
     };
-
 
     useEffect(() => {
         fetchOrders();
@@ -100,9 +100,9 @@ const AllOrders = () => {
                 <MenuItem value="cancelled">Cancelled</MenuItem>
             </Select>
 
-            {orders.map(order => (
+            {orders.length ? orders.map(order => (
                 <Accordion key={order._id}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ border: theme.palette.mode === 'dark' ? 'solid gray 1px' : 'inherit' }}>
                         <Typography sx={{ flexGrow: 1 }}>
                             #{order._id.slice(-6).toUpperCase()} - {order.user?.name} ({order.status})
                         </Typography>
@@ -111,18 +111,18 @@ const AllOrders = () => {
                             color={order.isDelivered ? "success" : "warning"}
                         />
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails sx={{ border: theme.palette.mode === 'light' ? '' : 'solid gray 1px' }}>
                         <Typography><strong>Email:</strong> {order.orderDetail.email}</Typography>
                         <Typography><strong>Phone:</strong> {order.orderDetail.phone}</Typography>
                         <Typography><strong>Address:</strong> {order.address}, {order.orderDetail.city}, {order.orderDetail.zip}</Typography>
                         <Typography><strong>Notes:</strong> {order.orderDetail.notes || "None"}</Typography>
                         <Typography sx={{ mt: 1 }}><strong>Items:</strong></Typography>
-                        {order.items.map(item => (
+                        {order?.items.map(item => (
                             <Typography key={item._id} sx={{ ml: 2 }}>
-                                {item.product.name} - x{item.quantity}
+                                {item?.product?.name} - x{item?.quantity}
                             </Typography>
                         ))}
-                        <Container sx={{display: 'flex', gap: 2}}>
+                        <Container sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
                             {!order.isDelivered && order.status !== 'cancelled' && (
                                 <Button
                                     variant="contained"
@@ -146,7 +146,11 @@ const AllOrders = () => {
                         </Container>
                     </AccordionDetails>
                 </Accordion>
-            ))}
+            ))
+                : <Typography variant="h5" mt={4} textAlign="center">
+                    No orders found
+                </Typography>
+            }
 
             {totalPages > 1 && (
                 <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>

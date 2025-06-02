@@ -5,12 +5,11 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import api from "../../api/axios";
-import { useNavigate } from "react-router-dom";
 import utc from 'dayjs/plugin/utc';
 
 const rowsPerPage = 5;
 
-const MyBookings = ({ rerender, setRerender }) => {
+const MyBookings = ({ rerender }) => {
     dayjs.extend(utc)
     const [bookings, setBookings] = useState([]);
     const [filtered, setFiltered] = useState([]);
@@ -54,7 +53,8 @@ const MyBookings = ({ rerender, setRerender }) => {
     const getStatusChip = (status) => {
         const color = status === "cancelled" ? "default"
             : status === "upcoming" ? "primary"
-                : "secondary";
+                : status === "inprogress" ? "info"
+                    : "secondary";
         return <Chip label={status.toUpperCase()} color={color} size="small" />;
     };
 
@@ -65,11 +65,10 @@ const MyBookings = ({ rerender, setRerender }) => {
 
             <Tabs value={tab} onChange={(_, val) => setTab(val)} sx={{
                 mb: 2, '& .MuiTabs-flexContainer': {
-                    flexWrap: { xs: 'nowrap', sm: 'wrap' } 
+                    flexWrap: { xs: 'nowrap', sm: 'wrap' }
                 }
-            }} variant="scrollable"
-                scrollButtons="auto" allowScrollButtonsMobile>
-                <Tab value="upcoming" label="Upcoming" />
+            }} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile>
+                <Tab value="upcoming" label="Upcoming"/>
                 <Tab value="inprogress" label="In-progress" />
                 <Tab value="past" label="Completed / Cancelled" />
             </Tabs>

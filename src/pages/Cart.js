@@ -25,7 +25,6 @@ const Cart = () => {
     const subtotal = cartItems.reduce((acc, item) => acc + +item?.product?.price * +item?.quantity, 0);
     const tax = +(subtotal * 0.1).toFixed(2);
     const total = subtotal + tax;
-    console.log(cartItems)
     return (
         <Box sx={{ px: { xs: 2, md: 4 }, py: { xs: 4, md: 6 }, maxWidth: "1200px", mx: "auto", justifyContent: 'center' }}>
             <Typography variant="h4" fontWeight={700} gutterBottom>
@@ -64,7 +63,7 @@ const Cart = () => {
                                         style={{
                                             width: 80,
                                             height: 80,
-                                            objectFit: "cover",
+                                            objectFit: "contain",
                                             borderRadius: 8,
                                         }}
                                     />

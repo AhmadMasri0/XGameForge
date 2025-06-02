@@ -1,37 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
 import {
     Box, Container, Typography, Button, Stack, Divider,
     Rating, Chip, TextField,
+    useTheme,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import './Arrow.css'
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
-import api, { API_URL } from "../../api/axios";
+import api from "../../api/axios";
+import ImageSlider from "./ImageSlider";
 
-function Arrow(props) {
-    const { className, style, onClick } = props;
 
-    return (
-        <div
-            className={className}
-            style={{ ...style, display: "block" }}
-            onClick={onClick}
-        />
-    );
-}
 
 
 const ProductDetail = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
-    // const product = allProducts.find((item) => item.id === parseInt(productId));
-    const [product, setProduct] = useState({});
+    const theme = useTheme();
+    const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const { addToCart } = useCart();
     const { user } = useAuth();
@@ -39,14 +29,32 @@ const ProductDetail = () => {
 
     useEffect(() => {
 
-        api.get(`/api/products/${productId}`)
-            .then(({ data }) => {
+        const fetchProduct = async () => {
+            try {
+                const { data } = await api.get(`/api/products/${productId}`);
                 setProduct(data);
-            })
-            .catch(err => console.error('Failed to fetch product:', err));
 
+            } catch (err) {
+                console.error('Failed to fetch product:', err)
+            }
+        }
+
+        fetchProduct();
     }, [productId]);
 
+
+    const AdminButton = ({ title, Icon, color, fun }) => {
+
+        return <Button
+            variant="contained"
+            color={color}
+            startIcon={<Icon />}
+            onClick={fun}
+            sx={{ width: '200px' }}
+        >
+            {title}
+        </Button>
+    }
 
     const handleQuantityChange = (e) => {
         let val = parseInt(e.target.value);
@@ -56,15 +64,6 @@ const ProductDetail = () => {
         setQuantity(val);
     };
 
-    const sliderSettings = {
-        dots: true,
-        infinite: product?.images?.length > 1,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        nextArrow: <Arrow />,
-        prevArrow: <Arrow />
-    };
 
     const deleteProduct = async () => {
         const isConfirmed = window.confirm('Are you sure you want to delete this product?');
@@ -79,23 +78,21 @@ const ProductDetail = () => {
             alert('Failed to delete product');
         }
     }
-
     if (!product) {
         return (
             <Container sx={{
                 display: 'flex', justifyContent: 'center',
-                alignItems: 'center', padding: '15px', flexDirection: 'column', gap: 5
+                alignItems: 'center', padding: '15px', flexDirection: 'column', gap: 5, marginTop: '15px'
             }}>
                 <Typography variant="h4">Product not found</Typography>
 
-                <Button
+                {user?.isAdmin && <Button
                     variant="contained"
-                    // startIcon={<ArrowBackIcon />}
                     onClick={() => navigate("/products/create")}
                     sx={{ mb: 2, width: '150px' }}
                 >
                     Add product
-                </Button>
+                </Button>}
             </Container>
         );
     }
@@ -103,6 +100,7 @@ const ProductDetail = () => {
     return (
         <Container sx={{ my: 6 }}>
             <Button
+                color=""
                 startIcon={<ArrowBackIcon />}
                 onClick={() => navigate("/shop")}
                 sx={{ mb: 2 }}
@@ -112,25 +110,7 @@ const ProductDetail = () => {
 
             <Stack direction={{ xs: "column", md: "row" }} sx={{ flexWrap: 'wrap', alignContent: 'center' }} spacing={4}>
 
-                <Box sx={{ width: { xs: "80%", md: 400 }, marginLeft: { xs: '10% !important', sm: '0 !important' } }}>
-                    <Slider {...sliderSettings}>
-                        {product?.images?.map((img, index) => (
-                            <Box
-                                key={index}
-                                component="img"
-                                src={API_URL + img.url}
-                                alt={img.url}
-                                sx={{
-                                    height: 400,
-                                    width: "100%",
-                                    // objectFit: "cover",
-                                    borderRadius: 2,
-                                }}
-                            />
-                        ))}
-                    </Slider>
-                </Box>
-
+                <ImageSlider product={product} />
 
                 <Box sx={{ flex: 1 }}>
                     <Typography variant="h4" fontWeight={700} gutterBottom>
@@ -166,11 +146,15 @@ const ProductDetail = () => {
                             />
                             <Button
                                 variant="contained"
-                                color="primary"
+                                sx={{
+                                    mb: 2, width: '200px',
+                                    border: theme.palette.mode === 'light' ? '' : '1px solid gray'
+                                }}
+
                                 startIcon={<AddShoppingCartIcon />}
                                 disabled={quantity > 3 || product.amount < 1}
                                 onClick={() => addToCart(product, quantity)}
-                                sx={{ width: '200px' }}
+
                             >
                                 Add to Cart
 
@@ -181,24 +165,8 @@ const ProductDetail = () => {
 
                         {user?.isAdmin && <Container sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginLeft: '0 !important' }}>
 
-                            <Button
-                                variant="contained"
-                                color="info"
-                                startIcon={<EditIcon />}
-                                onClick={() => navigate('/products/edit/' + productId)}
-                                sx={{ width: '200px' }}
-                            >
-                                Edit product
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={deleteProduct}
-                                sx={{ width: '200px' }}
-                            >
-                                Delete product
-                            </Button>
+                            <AdminButton title={'Edit product'} Icon={EditIcon} fun={() => navigate('/products/edit/' + productId)} color='info' />
+                            <AdminButton title={'Delete product'} Icon={DeleteIcon} fun={deleteProduct} color='error' />
                         </Container>}
                     </Stack>
                 </Box>

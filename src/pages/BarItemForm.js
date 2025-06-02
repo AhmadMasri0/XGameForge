@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import api, { API_URL } from '../api/axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const categories = ['Beverage', 'Snack', 'Cocktail', 'Meal', 'Other'];
 
@@ -49,9 +50,13 @@ const BarItemForm = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-    setPreview(URL.createObjectURL(file));
+    try {
+      const file = e.target.files[0];
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+    } catch (e) {
+      console.log(e)
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -72,7 +77,7 @@ const BarItemForm = () => {
         await api.post('/api/bar', data);
         alert('Bar item added successfully!');
       }
-      navigate('/bar');
+      navigate('/menu');
     } catch (error) {
       console.error(error);
       alert('Failed to submit bar item');
@@ -81,7 +86,18 @@ const BarItemForm = () => {
 
   return (
     <Container maxWidth="sm">
+
+
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+        <Button
+          color=""
+
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/menu")}
+          sx={{ mb: 2 }}
+        >
+          Back
+        </Button>
         <Typography variant="h5" mb={3}>
           {id ? 'Update' : 'Add'} Bar Item
         </Typography>
@@ -142,7 +158,7 @@ const BarItemForm = () => {
                 <img
                   src={preview}
                   alt="Preview"
-                  style={{ marginTop: 10, width: '100%', borderRadius: 8, height: 200, objectFit: 'cover' }}
+                  style={{ marginTop: 10, width: '100%', borderRadius: 8, height: 200, objectFit: 'contain' }}
                 />
               )}
             </Grid>

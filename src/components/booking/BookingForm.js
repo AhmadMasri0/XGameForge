@@ -8,8 +8,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
 const sessionTypes = ["VR", "Console", "PlayStation", "PC", "Other"];
 
-const BookingForm = ({ rerender, setRerender }) => {
-    const { user, isAuthenticated } = useAuth();
+const BookingForm = ({ setRerender }) => {
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -51,7 +51,7 @@ const BookingForm = ({ rerender, setRerender }) => {
 
     const handleBooking = async () => {
         try {
-            const res = await api.post(`/api/bookings`, form);
+            await api.post(`/api/bookings`, form);
             setBookingStatus("success");
             setRerender(pre => !pre);
             setTimeout(() => {
@@ -80,13 +80,14 @@ const BookingForm = ({ rerender, setRerender }) => {
         return (
             <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
                 <Typography variant="h5" mt={4} textAlign="center">
-                    Please login to make a reservation.
+                    Login now to reserve your prefered gaming session.
                 </Typography>
                 <Button
                     sx={{ width: '100px' }}
                     variant="contained"
                     type="button"
-                    onClick={() => navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`, { replace: true })}
+                    onClick={() =>
+                        navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`, { replace: true })}
                 >
                     Login
                 </Button>
@@ -96,7 +97,7 @@ const BookingForm = ({ rerender, setRerender }) => {
 
     return (
         <Container maxWidth="sm">
-            <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+            <Paper elevation={3} sx={{ p: 4, mb: 2 }}>
                 <Typography variant="h5" mb={2}>Book a Gaming Session</Typography>
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2} sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
@@ -124,10 +125,10 @@ const BookingForm = ({ rerender, setRerender }) => {
                                 name="date"
                                 label="Date"
                                 inputProps={{ min: new Date().toISOString().split("T")[0] }}
+                                InputLabelProps={{ shrink: true }}
                                 value={form.date}
                                 onChange={handleChange}
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
                                 required
                             />
                         </Grid>
@@ -139,9 +140,6 @@ const BookingForm = ({ rerender, setRerender }) => {
                                 name="startTime"
                                 label="Start Time"
                                 value={form.startTime}
-                                inputProps={{
-                                    min: new Date().toISOString().slice(0, 16),
-                                }}
                                 onChange={handleChange}
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
@@ -162,7 +160,6 @@ const BookingForm = ({ rerender, setRerender }) => {
                                 required
                             />
                         </Grid>
-                        {/* <Grid item xs={12} sx={{justifyContent: 'center', display: 'flex', flexDirection: 'row'}}> */}
                         <Button
                             sx={{ width: '200px', }}
 
@@ -173,7 +170,6 @@ const BookingForm = ({ rerender, setRerender }) => {
                         >
                             {checking ? <CircularProgress size={24} /> : "Check Availability"}
                         </Button>
-                        {/* </Grid> */}
 
                         {isAvailable !== null && (
                             <Grid item xs={12}>

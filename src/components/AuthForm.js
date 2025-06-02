@@ -8,11 +8,12 @@ import {
   IconButton,
   InputAdornment,
   Link as MuiLink,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }) => {
+const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, signupMessage }) => {
   const isSignup = type === "signup";
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,6 +25,11 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }
     setShowPassword(prev => !prev);
   };
 
+  const keyTrigger = (e) => {
+    if (e.keyCode === 13) {
+      onSubmit();
+    }
+  }
   const isDisabled =
     Object.values(errors).some(error => error) ||
     Object.values(formData).some(value => !value);
@@ -74,6 +80,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }
           onChange={handleChange}
           error={!!errors.password}
           helperText={errors.password}
+          onKeyDown={keyTrigger}
           fullWidth
           InputProps={{
             endAdornment: (
@@ -85,7 +92,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }
             ),
           }}
         />
-        {submitError && <span style={{color: "red", fontSize: '13px'}}>{submitError}</span>}
+        {submitError && <span style={{ color: "red", fontSize: '13px' }}>{submitError}</span>}
         <Button
           variant="contained"
           color="primary"
@@ -94,8 +101,9 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError }
         >
           {isSignup ? "Create Account" : "Login"}
         </Button>
-
-        {/* Navigation between auth modes */}
+        {signupMessage && <Alert severity="success">
+          {signupMessage}
+        </Alert>}
         <Typography variant="body2">
           {isSignup ? (
             <>
