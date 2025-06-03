@@ -203,7 +203,8 @@ const ProductForm = () => {
                                     return (
                                         <Grid item xs={4} key={idx}>
                                             <img src={src} alt="Preview" style={{ width: '100%', height: 150, objectFit: 'contain', borderRadius: 8 }} />
-                                            <Button fullWidth color="error" size="small" onClick={() => handleRemoveImage(idx)}>
+                                            <Button fullWidth color="error" size="small" onClick={() => handleRemoveImage(idx)}
+                                                disabled={existingImages.length + imageFiles.length <= 1}>
                                                 Remove
                                             </Button>
                                         </Grid>

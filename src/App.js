@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import VerifyEmail from "./pages/VerifyEmail";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Booking = lazy(() => import('./pages/Booking'));
 const Shop = lazy(() => import('./pages/Shop'));
@@ -40,6 +41,7 @@ function App() {
 
       <main style={{ flex: 1 }}>
         <Suspense fallback={<CircularProgress sx={{ margin: 'auto' }} />}>
+          <ScrollToTop />
           <Routes>
 
             <Route path="/" element={<Home />} />
