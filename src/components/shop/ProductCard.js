@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
                     component="img"
                     height="200"
                     sx={{ objectFit: 'contain' }}
-                    image={API_URL + product.images[0]['url']}
+                    image={product.images[0]['url']}
                     alt={product.name}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>

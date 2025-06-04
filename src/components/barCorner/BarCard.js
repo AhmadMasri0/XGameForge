@@ -27,7 +27,7 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
 
         <CardMedia
             component="img"
-            image={API_URL + item.image}
+            image={ item.image}
             alt={item.name}
             sx={{
                 height: 160,

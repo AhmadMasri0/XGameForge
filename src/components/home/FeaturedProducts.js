@@ -41,7 +41,7 @@ const FeaturedProducts = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={API_URL + item?.images[0]?.url}
+                image={item?.images[0]?.url}
                 alt={item.name}
                 sx={{ objectFit: "fill", }}
               />

@@ -31,7 +31,7 @@ const BarItemForm = () => {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
           setFormData({ ...res.data });
-          setPreview(`${API_URL}${res.data.image}`);
+          setPreview(`${res.data.image}`);
 
         } catch (error) {
           console.error(error);

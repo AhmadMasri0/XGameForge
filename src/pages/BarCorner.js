@@ -56,7 +56,7 @@ const BarCorner = () => {
                 setMenuItems(res.data)
             } catch (error) {
                 console.error(error);
-                alert('Failed to add bar item');
+                alert('Failed to et bar items');
             }
         }
         fetchBarItems();

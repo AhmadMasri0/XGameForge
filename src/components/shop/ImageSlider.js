@@ -37,8 +37,8 @@ const ImageSlider = ({ product }) => {
                 <Box
                     key={index}
                     component="img"
-                    src={API_URL + img.url}
-                    alt={img.url}
+                    src={img.url}
+                    alt={product.name}
                     sx={{
                         height: 400,
                         width: "100%",

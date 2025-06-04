@@ -58,7 +58,7 @@ const Cart = () => {
                             >
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <img
-                                        src={`${API_URL}${item?.product?.images && item?.product?.images[0].url}`}
+                                        src={`${item?.product?.images && item?.product?.images[0].url}`}
                                         alt={item?.product?.name}
                                         style={{
                                             width: 80,

@@ -199,7 +199,7 @@ const ProductForm = () => {
                             <Grid container spacing={2}>
                                 {[...existingImages, ...imageFiles].map((img, idx) => {
                                     const isNew = idx >= existingImages.length;
-                                    const src = isNew ? URL.createObjectURL(img) : `${API_URL}${img.url}`;
+                                    const src = isNew ? URL.createObjectURL(img) : `${img.url}`;
                                     return (
                                         <Grid item xs={4} key={idx}>
                                             <img src={src} alt="Preview" style={{ width: '100%', height: 150, objectFit: 'contain', borderRadius: 8 }} />

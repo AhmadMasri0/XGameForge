@@ -40,7 +40,7 @@ const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
                                 <ListItemAvatar>
                                     <Avatar
                                         variant="rounded"
-                                        src={`${API_URL}${item?.product?.images?.[0].url}`}
+                                        src={`${item?.product?.images?.[0].url}`}
                                         alt={item?.product?.title}
                                         sx={{ width: 48, height: 48 }}
                                     />
