@@ -121,6 +121,9 @@ const ProductDetail = () => {
                         <Chip label={product.category} color="info" />
                         <Chip label={product.platform} color="primary" />
                     </Stack>
+                    {product.brand && <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Brand:</strong> {product.brand || "Unknown"}
+                    </Typography>}
 
                     <Typography variant="h5" color="secondary" gutterBottom>
                         ${product.price}

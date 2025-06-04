@@ -51,14 +51,10 @@ function App() {
             <Route path="/menu" element={<BarCorner />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/login" element={
-              <ProtectedRoute>
-                <Login />
-              </ProtectedRoute>
+              <Login />
             } />
             <Route path="/signup" element={
-              <ProtectedRoute>
-                <Signup />
-              </ProtectedRoute>
+              <Signup />
             } />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={
@@ -89,7 +85,9 @@ function App() {
               </AdminRoute>
             } />
             <Route path="/thank-you" element={<ThankYou />}></Route>
-            <Route path="/profile" element={<Profile />}></Route>
+            <Route path="/profile" element={<ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>}></Route>
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
             <Route path="*" element={<NotFound />} />

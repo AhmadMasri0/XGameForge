@@ -27,8 +27,8 @@ const Footer = () => {
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               XGameForge
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Where Gaming Meets Lifestyle
+            <Typography variant="body2" color="text.secondary" width={'150px'}>
+            More than a gaming center — a social hub for gamers, coffee lovers, and tech enthusiasts.
             </Typography>
           </Grid>
 

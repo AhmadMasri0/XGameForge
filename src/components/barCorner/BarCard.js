@@ -27,7 +27,7 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
 
         <CardMedia
             component="img"
-            image={ item.image}
+            image={item.image}
             alt={item.name}
             sx={{
                 height: 160,
@@ -36,7 +36,10 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
         />
         <CardContent sx={{ flexGrow: 1 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6" fontWeight={600}>
+                <Typography variant="h6" fontWeight={600} sx={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden', height: '30px', whiteSpace: 'nowrap'
+                }}>
                     {item.name}
                 </Typography>
                 <Chip

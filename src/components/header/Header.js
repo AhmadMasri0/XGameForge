@@ -58,7 +58,7 @@ const Header = () => {
                 index === 4 && <IconButton
                     color="inherit"
                     onMouseEnter={handleCartHover}
-                    sx={{ position: "relative", marginLeft: 2 }}
+                    sx={{ position: "relative", marginLeft: 0 }}
                 >
                     <Badge badgeContent={cartItems.length || '0'} color="secondary">
                         <ShoppingCartIcon />
@@ -101,7 +101,8 @@ const Header = () => {
 
                             <CartPopover anchorEl={anchorEl} onClose={handleCartClose} cartItems={cartItems} removeItem={removeFromCart} />
                         </Box>
-                        <Switch onChange={toggleColorMode} color="default" />
+
+                        <Switch onChange={toggleColorMode} color="warning" checked={theme.palette.mode === 'dark'} />
 
                         <IconButton color="inherit" edge="end"
                             sx={{ display: { sm: "none" } }} onClick={toggleDrawer} >

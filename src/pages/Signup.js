@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import AuthForm from "../components/AuthForm";
 import { useAuth } from "../contexts/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Signup = () => {
     const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
     const { signup, signupMessage } = useAuth();
     const [submitError, setSubmitError] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
 
     const validate = () => {
         const newErrors = {};
@@ -37,6 +41,8 @@ const Signup = () => {
     const handleSignup = async () => {
         validate();
         if (Object.keys(errors).length === 0) {
+
+            navigate(redirectPath, { replace: true });
             setSubmitError(signup(formData));
         }
     };

@@ -57,6 +57,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
             name="username"
             value={formData.username || ""}
             onChange={handleChange}
+            onKeyDown={keyTrigger}
             error={!!errors.username}
             helperText={errors.username}
             fullWidth
@@ -68,6 +69,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
           type="email"
           value={formData.email}
           onChange={handleChange}
+          onKeyDown={keyTrigger}
           error={!!errors.email}
           helperText={errors.email}
           fullWidth

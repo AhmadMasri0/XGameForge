@@ -110,7 +110,7 @@ const ProductForm = () => {
             alert(isEdit ? "Product updated" : "Product created");
             navigate("/shop");
         } catch (err) {
-            console.error("Error submitting form", err);
+            console.error(err);
             alert("Submission failed");
         }
     };
@@ -118,7 +118,7 @@ const ProductForm = () => {
     return (
         <Container maxWidth="md">
             <Paper sx={{ p: 4, mt: 4 }}>
-                <Button startIcon={<ArrowBackIcon />} color="" onClick={() => navigate("/products/" + id)} sx={{ mb: 2 }}>
+                <Button startIcon={<ArrowBackIcon />} color="" onClick={() => navigate(id ? "/products/" + id : '/shop')} sx={{ mb: 2 }}>
                     Back
                 </Button>
                 <Typography variant="h5" mb={3}>
