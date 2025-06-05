@@ -187,7 +187,7 @@ const BookingForm = ({ setRerender }) => {
                             <Grid item xs={12}>
                                 <Button
                                     variant="outlined"
-                                    color="primary"
+                                    color=""
                                     fullWidth
                                     onClick={handleBooking}
                                 >
