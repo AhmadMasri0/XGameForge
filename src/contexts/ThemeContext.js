@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 export const ColorModeContext = createContext({
   toggleColorMode: () => {},
+  mode: 'light'
 });
 
 const getTheme = (mode) => ({
@@ -37,12 +38,13 @@ export default function ThemeContextProvider({ children }) {
   const colorMode = useMemo(() => ({
     toggleColorMode: () => {
       setMode((prevMode) => {
-        const nextMode = prevMode === "dark" ? "light" : 'dark';
+        const nextMode = prevMode === "dark" ? "light" : "dark";
         localStorage.setItem("themeMode", nextMode);
         return nextMode;
       });
     },
-  }), []);
+    mode,
+  }), [mode]);
 
   const theme = useMemo(() => createTheme(getTheme(mode)), [mode]);
 

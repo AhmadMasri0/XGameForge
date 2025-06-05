@@ -62,7 +62,7 @@ const AllOrders = () => {
 
         try {
             await api.put(`/api/orders/cancelOrder/${orderId}`);
-            fetchOrders(); 
+            fetchOrders();
         } catch (err) {
             console.error("Failed to cancel order:", err);
             alert("Could not cancel order.");
@@ -118,9 +118,16 @@ const AllOrders = () => {
                         <Typography><strong>Notes:</strong> {order.orderDetail.notes || "None"}</Typography>
                         <Typography sx={{ mt: 1 }}><strong>Items:</strong></Typography>
                         {order?.items.map(item => (
-                            <Typography key={item._id} sx={{ ml: 2 }}>
-                                {item?.product?.name} - x{item?.quantity}
-                            </Typography>
+                            <Container sx={{display: 'flex', alignItems: 'center'}}>
+                                <img
+                                    src={`${item?.product?.images[0]?.url}`}
+                                    alt={item.product.name}
+                                    style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 4 }}
+                                />
+                                <Typography key={item._id} sx={{ ml: 2 }}>
+                                    {item?.product?.name} - x{item?.quantity}
+                                </Typography>
+                            </Container>
                         ))}
                         <Container sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
                             {!order.isDelivered && order.status !== 'cancelled' && (

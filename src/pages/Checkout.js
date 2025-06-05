@@ -5,7 +5,8 @@ import {
   Container,
   Typography,
   Paper,
-  Button
+  Button,
+  useTheme
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CheckoutForm from "../components/checkout/CheckoutForm";
@@ -18,13 +19,26 @@ import { useCart } from "../contexts/CartContext";
 import { Link } from "react-router-dom";
 
 const stripePromise = loadStripe("pk_test_51RRapmRxYukTAlpeFv3yZWY3E7x9vZDDYxv0KbOqfgXLYS9lto4AAzeDNpqkZyel3bSW5t25gPiQsez574r0pIFN00TpnC9KHT");
-const appearance = { theme: 'flat', variables: { colorPrimary: '#0a1724' } };
 
 export default function CheckoutPage() {
 
 
   const [clientSecret, setClientSecret] = useState(null);
   const { cartItems } = useCart();
+  const theme = useTheme();
+
+  const appearance = {
+    theme: theme.palette.mode === 'dark' ? 'night' : 'stripe',
+    variables: { colorPrimary: theme.customColors.primary, padding: '0' },
+    rules: {
+      '.Input': {
+        padding: '6px',
+      },
+
+    },
+
+  };
+
 
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -71,7 +85,16 @@ export default function CheckoutPage() {
           <Typography variant="h6">Shipping & Payment</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {clientSecret && <Elements stripe={stripePromise} options={{ appearance, clientSecret }} >
+          {clientSecret && <Elements stripe={stripePromise} options={{
+            layout: 'accordion',
+            fields: {
+              billingDetails: {
+                name: 'never',
+                email: 'never',
+                phone: 'never',
+              },
+            }, appearance, clientSecret,
+          }} >
 
             <CheckoutForm />
           </Elements>}

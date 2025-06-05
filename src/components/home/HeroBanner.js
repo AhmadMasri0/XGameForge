@@ -1,7 +1,6 @@
 import { Box, Typography, Button, useTheme } from "@mui/material";
 import heroImage from "../../assets/hero1.png";
 import { Link } from "react-router-dom";
-import MotionFade from "../common/MotionFade";
 
 const HeroBanner = () => {
     const theme = useTheme();
@@ -9,7 +8,7 @@ const HeroBanner = () => {
     return (
         <Box
             sx={{
-                height: { xs: "60vh", md: "80vh" },
+                height: { xs: "100vh", md: "100vh" },
                 backgroundImage: `url(${heroImage})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",

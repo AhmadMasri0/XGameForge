@@ -6,29 +6,34 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Signup = () => {
     const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const { signup, signupMessage } = useAuth();
+    const { signup, signupMessage, user } = useAuth();
     const [submitError, setSubmitError] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
     const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
+    const [touched, setTouched] = useState({});
 
     const validate = () => {
         const newErrors = {};
 
-        if (!formData.username) {
-            newErrors.username = "Username is required";
+        if (touched.username) {
+            if (!formData.username) {
+                newErrors.username = "Username is required";
+            }
         }
-
-        if (!formData.email) {
-            newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Invalid email format";
+        if (touched.email) {
+            if (!formData.email) {
+                newErrors.email = "Email is required";
+            } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+                newErrors.email = "Invalid email format";
+            }
         }
-
-        if (!formData.password) {
-            newErrors.password = "Password is required";
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
+        if (touched.password) {
+            if (!formData.password) {
+                newErrors.password = "Password is required";
+            } else if (formData.password.length < 6) {
+                newErrors.password = "Password must be at least 6 characters";
+            }
         }
 
         setErrors(newErrors);
@@ -37,13 +42,18 @@ const Signup = () => {
         validate();
     }, [formData,]);
 
+    useEffect(() => {
+
+        if (user) {
+            return navigate('/');
+        }
+    }, [user]);
 
     const handleSignup = async () => {
         validate();
         if (Object.keys(errors).length === 0) {
-
-            navigate(redirectPath, { replace: true });
-            setSubmitError(signup(formData));
+            const res = await signup(formData);
+            setSubmitError(res);
         }
     };
 
@@ -55,6 +65,8 @@ const Signup = () => {
             setFormData={setFormData}
             onSubmit={handleSignup}
             errors={errors}
+            touched={touched}
+            setTouched={setTouched}
             submitError={submitError}
             signupMessage={signupMessage}
         />

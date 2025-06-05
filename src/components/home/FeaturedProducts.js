@@ -1,7 +1,7 @@
 import { Box, Grid, Card, CardMedia, CardContent, Typography, Button, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api, { API_URL } from "../../api/axios";
+import api from "../../api/axios";
 import MotionFade from "../common/MotionFade";
 
 const FeaturedProducts = () => {
@@ -34,23 +34,25 @@ const FeaturedProducts = () => {
             <Card sx={{
               transition: "transform 0.3s ease",
               height: "100%", display: "flex", flexDirection: "column", '&:hover': {
-                transform: "scale(1.03)",
-                boxShadow: 6,
+                transform: "scale(1.03)", boxShadow: 6,
               },
             }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image={item?.images[0]?.url}
-                alt={item.name}
-                sx={{ objectFit: "fill", }}
-              />
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h6" fontWeight={600} textAlign="center">
-                  {item.name}
-                </Typography>
-              </CardContent>
+              <Link to={'/shop'} style={{ textDecoration: 'none', color: theme.customColors.primary }}>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={item?.images[0]?.url}
+                  alt={item.name}
+                  sx={{ objectFit: "fill", }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" fontWeight={600} textAlign="center">
+                    {item.name}
+                  </Typography>
+                </CardContent>
+              </Link>
             </Card>
+
           </Grid>
         ))}
       </Grid>
@@ -62,9 +64,11 @@ const FeaturedProducts = () => {
           component={Link}
           to="/shop"
           size="large"
-          sx={{'&:hover': {
-            backgroundColor: theme.customColors.activelink
-          }}}
+          sx={{
+            '&:hover': {
+              backgroundColor: theme.customColors.activelink
+            }
+          }}
         >
           Explore more in Our Shop
         </Button>

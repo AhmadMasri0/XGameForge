@@ -4,7 +4,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
-import { API_URL } from "../../api/axios";
 
 const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
     

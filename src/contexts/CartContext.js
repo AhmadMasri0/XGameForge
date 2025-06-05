@@ -14,12 +14,13 @@ export const CartProvider = ({ children }) => {
                 let existingCart;
                 try {
                     const res = await api.get("/api/cart/checkcart");
-                    existingCart = res.data.items;
+                    console.log(res.data);
+                    existingCart = res.data?.items;
                 } catch (err) {
                     console.error("Failed to check cart:", err);
                 }
                 const guestCart = JSON.parse(localStorage.getItem("cart")) || [];
-                if (existingCart?.length === 0) {
+                if (!existingCart || existingCart?.length === 0) {
                     for (let item of guestCart) {
                         try {
                             await api.post("/api/cart", {

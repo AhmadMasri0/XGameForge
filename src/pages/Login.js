@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from "react";
 import AuthForm from "../components/AuthForm";
 import { useAuth } from "../contexts/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const { login } = useAuth();
+    const { login, user } = useAuth();
     const [submitError, setSubmitError] = useState('');
-    const location = useLocation();
     const navigate = useNavigate();
-    const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
+    const [touched, setTouched] = useState({});
 
     useEffect(() => {
         validate();
     }, [formData]);
 
+    useEffect(() => {
+
+        if (user) {
+            return navigate('/');
+        }
+    }, [user]);
+
     const validate = () => {
         const newErrors = {};
-        if (!formData.email) {
-            newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Invalid email format";
+        if (touched.email) {
+            if (!formData.email) {
+                newErrors.email = "Email is required";
+            } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+                newErrors.email = "Invalid email format";
+            }
         }
+        if (touched.password) {
 
-        if (!formData.password) {
-            newErrors.password = "Password is required";
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
+            if (!formData.password) {
+                newErrors.password = "Password is required";
+            } else if (formData.password.length < 6) {
+                newErrors.password = "Password must be at least 6 characters";
+            }
         }
-
         setErrors(newErrors);
     };
 
@@ -37,8 +46,8 @@ const Login = () => {
     const handleLogin = async () => {
         validate();
         if (Object.keys(errors).length === 0) {
-            navigate(redirectPath, { replace: true });
-            setSubmitError(login(formData));
+            const res = await login(formData);
+            setSubmitError(res);
         }
     };
 
@@ -49,6 +58,8 @@ const Login = () => {
             setFormData={setFormData}
             onSubmit={handleLogin}
             errors={errors}
+            touched={touched}
+            setTouched={setTouched}
             submitError={submitError}
         />
     );

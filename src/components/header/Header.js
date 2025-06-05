@@ -1,12 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
     AppBar, Box, Toolbar, IconButton,
     Button, Badge,
-    Switch
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
-import { ColorModeContext } from "../../contexts/ThemeContext";
 import { useTheme } from "@mui/material/styles";
 import { useAuth } from "../../contexts/AuthContext";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -14,11 +12,11 @@ import { useCart } from "../../contexts/CartContext";
 import CartPopover from "./CartPopover";
 import MobileDrawer from "./MobileDrawer";
 import Logo from "./Logo";
+import ThemeSwitch from "../ThemeSwitch";
 
 const Header = () => {
     const theme = useTheme();
     const location = useLocation();
-    const { toggleColorMode } = useContext(ColorModeContext);
     const [mobileOpen, setMobileOpen] = useState(false);
     const { user, isAuthenticated } = useAuth();
     const { cartItems, removeFromCart } = useCart();
@@ -98,11 +96,10 @@ const Header = () => {
                         >
                             {navItems.map((item, index) => renderNavLink(item, index))}
 
-
                             <CartPopover anchorEl={anchorEl} onClose={handleCartClose} cartItems={cartItems} removeItem={removeFromCart} />
                         </Box>
 
-                        <Switch onChange={toggleColorMode} color="warning" checked={theme.palette.mode === 'dark'} />
+                        <ThemeSwitch />
 
                         <IconButton color="inherit" edge="end"
                             sx={{ display: { sm: "none" } }} onClick={toggleDrawer} >
