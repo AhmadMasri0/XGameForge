@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import { ColorModeContext } from '../../contexts/ThemeContext';
 
 const ModeSwitch = styled(Switch)(({ theme }) => ({
-    width: 62,
+    width: 55,
     height: 34,
-    padding: 7,
+    padding: 8,
     paddingRight: '0',
     marginRight: '0',
     '& .MuiSwitch-switchBase': {
