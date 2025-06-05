@@ -2,7 +2,6 @@ import { Box, Drawer, List, ListItem, ListItemText, Typography, useTheme } from 
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCart } from "../../contexts/CartContext";
-import logo from "../../assets/logo.png";
 
 const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
     const theme = useTheme();
@@ -19,7 +18,7 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                     display: "flex", justifyContent: "center", alignItems: "center", my: 2, cursor: 'pointer',
                     textDecoration: "none",
                 }}>
-                <img src={logo} alt="logo" style={{ height: 32, marginRight: 8 }} />
+                <img src={'assets/logo.png'} alt="logo" style={{ height: 32, marginRight: 8 }} />
                 <Typography variant="h6" color={theme.customColors.primary}>XGameForge</Typography>
             </Box>
 

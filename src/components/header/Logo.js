@@ -1,13 +1,12 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
 
 const Logo = () => {
 
     const theme = useTheme();
 
     return <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, }}>
-        <img src={logo} alt="logo" style={{ height: 40, marginRight: 8 }} />
+        <img src={'assets/logo.png'} alt="logo" style={{ height: 40, marginRight: 8 }} />
         <Typography
             variant="h6" fontWeight={700}
             component={Link} to="/"

@@ -1,5 +1,4 @@
 import { Box, Typography, Button, useTheme } from "@mui/material";
-import heroImage from "../../assets/hero1.png";
 import { Link } from "react-router-dom";
 
 const HeroBanner = () => {
@@ -9,7 +8,7 @@ const HeroBanner = () => {
         <Box
             sx={{
                 height: { xs: "100vh", md: "100vh" },
-                backgroundImage: `url(${heroImage})`,
+                backgroundImage: `url(${'assets/hero1.png'})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 display: "flex",
@@ -20,7 +19,6 @@ const HeroBanner = () => {
                 textAlign: "center",
             }}
         >
-            {/* <MotionFade> */}
             <Box sx={{
                 backgroundColor: "rgba(254, 250, 250, 0.14)",
                 p: 4, borderRadius: 2
@@ -43,7 +41,6 @@ const HeroBanner = () => {
                     Book a Session
                 </Button>
             </Box>
-            {/* </MotionFade> */}
         </Box>
     );
 };

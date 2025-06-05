@@ -12,7 +12,7 @@ import { useCart } from "../../contexts/CartContext";
 import CartPopover from "./CartPopover";
 import MobileDrawer from "./MobileDrawer";
 import Logo from "./Logo";
-import ThemeSwitch from "../ThemeSwitch";
+import ThemeSwitch from "../common/ThemeSwitch";
 
 const Header = () => {
     const theme = useTheme();
