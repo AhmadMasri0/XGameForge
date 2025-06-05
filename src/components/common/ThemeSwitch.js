@@ -8,6 +8,8 @@ const ModeSwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
     padding: 7,
+    paddingRight: '0',
+    marginRight: '0',
     '& .MuiSwitch-switchBase': {
         padding: 0,
         margin: 1,

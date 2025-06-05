@@ -2,6 +2,7 @@ import { Box, Drawer, List, ListItem, ListItemText, Typography, useTheme } from 
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCart } from "../../contexts/CartContext";
+import ThemeSwitch from "../common/ThemeSwitch";
 
 const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
     const theme = useTheme();
@@ -38,7 +39,7 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                         }} />
                     </ListItem> : null
                 ))}
-                <ListItem component={Link} to="/cart" sx={{ textDecoration: 'none', color: theme.customColors.primary }}>
+                {/* <ListItem component={Link} to="/cart" sx={{ textDecoration: 'none', color: theme.customColors.primary }}>
                     <ListItemText color=""
                         primary={
                             <>
@@ -47,7 +48,8 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                             </>
                         }
                     />
-                </ListItem>
+                </ListItem> */}
+                        <ThemeSwitch />
 
             </List>
         </Box>
