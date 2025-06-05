@@ -42,6 +42,7 @@ const Header = () => {
             component={Link}
             to={item.path}
             sx={{
+                whiteSpace: 'nowrap',
                 fontWeight: location.pathname === item.path ? 700 : 400,
                 color: location.pathname === item.path ? theme.customColors.activelink : 'inherit',
                 '&:hover': { color: theme.customColors.activelink }
@@ -73,7 +74,10 @@ const Header = () => {
                     >
                         <Logo />
                         {!isMobile && (
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                            <Box sx={{
+                                display: "flex", alignItems: "center", gap: 2,
+                                flexWrap: { sm: 'wrap', md: 'nowrap' }, justifyContent: 'center'
+                            }}>
                                 {navItems.map(renderNavLink)}
                                 <ThemeSwitch />
                                 <IconButton
