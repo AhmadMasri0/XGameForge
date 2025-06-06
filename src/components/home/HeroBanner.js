@@ -7,7 +7,7 @@ const HeroBanner = () => {
     return (
         <Box
             sx={{
-                height: { xs: "100vh", md: "100vh" },
+                height: "100vh",
                 backgroundImage: `url(${'assets/hero1.png'})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",

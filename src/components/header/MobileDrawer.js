@@ -1,13 +1,9 @@
 import { Box, Drawer, List, ListItem, ListItemText, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useCart } from "../../contexts/CartContext";
 import ThemeSwitch from "../common/ThemeSwitch";
 
 const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
     const theme = useTheme();
-    const { cartItems } = useCart();
-
 
     return <Drawer anchor="left" open={mobileOpen} onClose={toggleDrawer}
         sx={{
@@ -39,17 +35,7 @@ const MobileDrawer = ({ toggleDrawer, navItems, mobileOpen }) => {
                         }} />
                     </ListItem> : null
                 ))}
-                {/* <ListItem component={Link} to="/cart" sx={{ textDecoration: 'none', color: theme.customColors.primary }}>
-                    <ListItemText color=""
-                        primary={
-                            <>
-                                <ShoppingCartIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                                Cart ({cartItems.length})
-                            </>
-                        }
-                    />
-                </ListItem> */}
-                        <ThemeSwitch />
+                <ThemeSwitch />
 
             </List>
         </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Container, Typography, Table, TableHead, TableBody,
     TableRow, TableCell, Paper, TableContainer, Select,
@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import api from "../../api/axios";
 
-const AdminReservations = ({ rerender, setRerender }) => {
+const AdminReservations = ({ rerender }) => {
     const [bookings, setBookings] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");

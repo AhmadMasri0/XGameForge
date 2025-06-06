@@ -1,12 +1,13 @@
 import {
     Box, Typography, IconButton, Popover, Divider,
     Button, List, ListItem, ListItemAvatar, Avatar,
+    Container,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 
 const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
-    
+
     const open = Boolean(anchorEl);
     const total = cartItems.reduce((sum, item) => sum + +item?.product?.price * +item?.quantity, 0).toFixed(2);
 
@@ -30,8 +31,15 @@ const CartPopover = ({ anchorEl, onClose, cartItems, removeItem }) => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
 
-                {cartItems?.length === 0 ? (
+                {cartItems?.length === 0 ? (<Container sx={{
+                    display: 'flex',
+                    flexDirection: 'column', alignItems: 'center', gap: 2
+                }}>
                     <Typography variant="body2">Your cart is empty.</Typography>
+                    <Button component={Link} to="/shop" variant="contained" color="primary">
+                        Browse Shop
+                    </Button>
+                </Container>
                 ) : (
                     <List dense>
                         {cartItems?.map((item) => (

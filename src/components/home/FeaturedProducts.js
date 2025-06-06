@@ -37,13 +37,13 @@ const FeaturedProducts = () => {
                 transform: "scale(1.03)", boxShadow: 6,
               },
             }}>
-              <Link to={'/shop'} style={{ textDecoration: 'none', color: theme.customColors.primary }}>
+              <Link to={'/products/' + item._id} style={{ textDecoration: 'none', color: theme.customColors.primary }}>
                 <CardMedia
                   component="img"
                   height="200"
                   image={item?.images[0]?.url}
                   alt={item.name}
-                  sx={{ objectFit: "fill", }}
+                  sx={{ objectFit: "cover" }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" fontWeight={600} textAlign="center">
@@ -66,7 +66,8 @@ const FeaturedProducts = () => {
           size="large"
           sx={{
             '&:hover': {
-              backgroundColor: theme.customColors.activelink
+              backgroundColor: theme.customColors.activelink,
+              color: 'white'
             }
           }}
         >

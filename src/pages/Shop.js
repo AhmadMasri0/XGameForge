@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
     Container, Typography, Box, Divider, Grid,
-    Pagination, Stack, CircularProgress, Button,
-    useTheme
+    Pagination, Stack, CircularProgress,
 } from "@mui/material";
 import ProductFilter from "../components/shop/ProductFilter";
 import ProductGrid from "../components/shop/ProductGrid";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import AdminButton from "../components/common/AdminButton";
+import { useNavigate } from "react-router-dom";
 
 const PRODUCTS_PER_PAGE = 10;
 
@@ -25,9 +25,8 @@ const Shop = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
     const { user } = useAuth();
-    const theme = useTheme();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -106,14 +105,7 @@ const Shop = () => {
 
                     {user?.isAdmin && (
                         <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
-                            <Button
-
-                                variant="contained"
-                                onClick={() => navigate("/products/create")}
-                                sx={{ mb: 2, border: theme.palette.mode === 'light' ? '' : '1px solid gray' }}
-                            >
-                                Add product
-                            </Button>
+                            <AdminButton title={'Add product'} onClick={() => navigate('/products/create')}/>
                         </Container>
                     )}
 

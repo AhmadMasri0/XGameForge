@@ -14,7 +14,6 @@ export const CartProvider = ({ children }) => {
                 let existingCart;
                 try {
                     const res = await api.get("/api/cart/checkcart");
-                    console.log(res.data);
                     existingCart = res.data?.items;
                 } catch (err) {
                     console.error("Failed to check cart:", err);

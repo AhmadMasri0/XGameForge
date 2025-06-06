@@ -1,22 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
     Container, Paper, Grid, TextField, MenuItem,
     Button, Typography, Alert, CircularProgress
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
+import UnAuthBookingForm from "./UnAuthBookingForm";
 const sessionTypes = ["VR", "Console", "PlayStation", "PC", "Other"];
 
 const BookingForm = ({ setRerender }) => {
     const { isAuthenticated } = useAuth();
-    const navigate = useNavigate();
-
     const [form, setForm] = useState({
-        sessionType: "VR",
-        date: "",
-        startTime: "",
-        endTime: ""
+        sessionType: "VR", date: "",
+        startTime: "", endTime: ""
     });
 
     const [checking, setChecking] = useState(false);
@@ -76,138 +72,100 @@ const BookingForm = ({ setRerender }) => {
         await checkAvailability();
     };
 
+    const BookingsInput = ({ label, name, value, subValue, props }) => {
+        return <TextField sx={{ width: '150px' }}
+            label={label} name={name} value={value}
+            onChange={handleChange} fullWidth required  {...props}
+        >
+            {subValue}
+        </TextField>
+    };
     if (!isAuthenticated) {
-        return (
-            <Container maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-                <Typography variant="h5" mt={4} textAlign="center">
-                    Login now to reserve your prefered gaming session.
-                </Typography>
-                <Button
-                    sx={{ width: '100px' }}
-                    variant="contained"
-                    type="button"
-                    onClick={() =>
-                        navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`, { replace: true })}
-                >
-                    Login
-                </Button>
-            </Container>
-        );
+        return <UnAuthBookingForm />;
     }
-
     return (
         <Container maxWidth="sm">
             <Paper elevation={3} sx={{ p: 4, mb: 2 }}>
                 <Typography variant="h5" mb={2}>Book a Gaming Session</Typography>
-                <form onSubmit={handleSubmit}>
-                    <Grid container spacing={2} sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
-                        <Grid item xs={12}>
-
-                            <TextField
-                                sx={{ width: '150px' }}
-                                select
-                                label="Session Type"
-                                name="sessionType"
-                                value={form.sessionType}
-                                onChange={handleChange}
-                                fullWidth
-                            >
-                                {sessionTypes.map(type => (
+                <Grid container spacing={2} sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+                    <Grid item xs={12}>
+                        <BookingsInput label={"Session Type"} value={form.sessionType} name="sessionType" props={{ select: true }}
+                            subValue={
+                                sessionTypes.map(type => (
                                     <MenuItem key={type} value={type}>{type}</MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                sx={{ width: '150px', }}
-
-                                type="date"
-                                name="date"
-                                label="Date"
-                                inputProps={{ min: new Date().toISOString().split("T")[0] }}
-                                InputLabelProps={{ shrink: true }}
-                                value={form.date}
-                                onChange={handleChange}
-                                fullWidth
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                sx={{ width: '150px', }}
-
-                                type="time"
-                                name="startTime"
-                                label="Start Time"
-                                value={form.startTime}
-                                onChange={handleChange}
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                sx={{ width: '150px', }}
-
-                                type="time"
-                                name="endTime"
-                                label="End Time"
-                                value={form.endTime}
-                                onChange={handleChange}
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                                required
-                            />
-                        </Grid>
-                        <Button
-                            sx={{ width: '200px', }}
-
-                            variant="contained"
-                            type="submit"
-                            fullWidth
-                            disabled={checking}
-                        >
-                            {checking ? <CircularProgress size={24} /> : "Check Availability"}
-                        </Button>
-
-                        {isAvailable !== null && (
-                            <Grid item xs={12}>
-                                {isAvailable ? (
-                                    <Alert severity="success">
-                                        Session is available. Click below to confirm booking.
-                                    </Alert>
-                                ) : (
-                                    <Alert severity="error">{error}</Alert>
-                                )}
-                            </Grid>
-                        )}
-
-                        {isAvailable && (
-                            <Grid item xs={12}>
-                                <Button
-                                    variant="outlined"
-                                    color=""
-                                    fullWidth
-                                    onClick={handleBooking}
-                                >
-                                    Confirm Booking
-                                </Button>
-                            </Grid>
-                        )}
-
-                        {bookingStatus === "success" && (
-                            <Grid item xs={12}>
-                                <Alert severity="success">Booking confirmed!</Alert>
-                            </Grid>
-                        )}
-                        {bookingStatus === "error" && (
-                            <Grid item xs={12}>
-                                <Alert severity="error">Failed to confirm booking.</Alert>
-                            </Grid>
-                        )}
+                                ))
+                            } />
                     </Grid>
-                </form>
+                    <Grid item xs={12}>
+                        <BookingsInput label={"Date"} value={form.date} name="date"
+                            props={{
+                                type: "date",
+                                inputProps: { min: new Date().toISOString().split("T")[0] },
+                                InputLabelProps: { shrink: true }
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <BookingsInput label={"Start Time"} value={form.startTime} name="startTime"
+                            props={{
+                                type: "time",
+                                InputLabelProps: { shrink: true }
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <BookingsInput label={"End Time"} value={form.endTime} name="endTime"
+                            props={{
+                                type: "time",
+                                InputLabelProps: { shrink: true }
+                            }}
+                        />
+                    </Grid>
+                    <Button
+                        sx={{ width: '200px', }}
+                        variant="contained"
+                        type="submit"
+                        onClick={handleSubmit}
+                        fullWidth
+                        disabled={checking}
+                    >
+                        {checking ? <CircularProgress size={24} /> : "Check Availability"}
+                    </Button>
+
+                    {isAvailable !== null && (
+                        <Grid item xs={12}>
+                            {isAvailable ? (
+                                <Alert severity="success">
+                                    Session is available. Click below to confirm booking.
+                                </Alert>
+                            ) : (
+                                <Alert severity="error">{error}</Alert>
+                            )}
+                        </Grid>
+                    )}
+
+                    {isAvailable && (
+                        <Grid item xs={12}>
+                            <Button
+                                variant="outlined" color=""
+                                fullWidth onClick={handleBooking}
+                            >
+                                Confirm Booking
+                            </Button>
+                        </Grid>
+                    )}
+
+                    {bookingStatus === "success" && (
+                        <Grid item xs={12}>
+                            <Alert severity="success">Booking confirmed!</Alert>
+                        </Grid>
+                    )}
+                    {bookingStatus === "error" && (
+                        <Grid item xs={12}>
+                            <Alert severity="error">Failed to confirm booking.</Alert>
+                        </Grid>
+                    )}
+                </Grid>
             </Paper>
         </Container>
     );

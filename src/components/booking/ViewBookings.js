@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Container, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TablePagination, Tabs, Tab, Chip
@@ -49,6 +49,7 @@ const MyBookings = ({ rerender }) => {
             console.error("Failed to cancel", err);
         }
     };
+
 
     const getStatusChip = (status) => {
         const color = status === "cancelled" ? "default"

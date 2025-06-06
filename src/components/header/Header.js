@@ -33,7 +33,7 @@ const Header = () => {
         { name: "Game Fuel", path: "/menu" },
         { name: "About Us", path: "/about" },
     ];
-    if (isMobile) {
+    if (isMobile && user) {
         navItems = [...navItems, { name: 'Logout', path: '/logout' }]
     }
     const renderNavLink = (item) => (
@@ -54,16 +54,12 @@ const Header = () => {
 
     return (
         <>
-            <AppBar position="static" component="nav" elevation={1}>
+            <AppBar position="sticky" component="nav" elevation={1}>
                 <Toolbar>
                     <Box
                         sx={{
                             display: "flex",
-                            flexDirection: {
-                                xs: 'row',
-                                sm: 'column',
-                                md: 'row',
-                            },
+                            flexDirection: { xs: 'row', sm: 'column', md: 'row' },
                             justifyContent: "space-between",
                             alignItems: "center",
                             width: "100%",
@@ -80,11 +76,7 @@ const Header = () => {
                             }}>
                                 {navItems.map(renderNavLink)}
                                 <ThemeSwitch />
-                                <IconButton
-                                    color="inherit"
-                                    onMouseEnter={handleCartHover}
-                                    sx={{ ml: 1 }}
-                                >
+                                <IconButton color="inherit" onMouseEnter={handleCartHover} sx={{ ml: 1 }}>
                                     <Badge badgeContent={cartItems.length || '0'} color="secondary">
                                         <ShoppingCartIcon />
                                     </Badge>
@@ -162,21 +154,11 @@ const Header = () => {
                 </Toolbar>
             </AppBar>
 
-            {/* Cart Hover Popover */}
-            <CartPopover
-                anchorEl={anchorEl}
-                onClose={handleCartClose}
-                cartItems={cartItems}
-                removeItem={removeFromCart}
-            />
+            <CartPopover anchorEl={anchorEl} onClose={handleCartClose}
+                cartItems={cartItems} removeItem={removeFromCart} />
 
-            {/* Mobile Drawer */}
-            <MobileDrawer
-                navItems={navItems}
-                cartItems={cartItems}
-                toggleDrawer={toggleDrawer}
-                mobileOpen={mobileOpen}
-            />
+            <MobileDrawer navItems={navItems} cartItems={cartItems}
+                toggleDrawer={toggleDrawer} mobileOpen={mobileOpen} />
         </>
     );
 };
