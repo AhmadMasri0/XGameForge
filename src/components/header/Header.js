@@ -22,7 +22,6 @@ const Header = () => {
 
     const { user } = useAuth();
     const { cartItems, removeFromCart } = useCart();
-
     const handleCartHover = (event) => setAnchorEl(event.currentTarget);
     const handleCartClose = () => setAnchorEl(null);
     const toggleDrawer = () => setMobileOpen((prev) => !prev);
@@ -77,7 +76,7 @@ const Header = () => {
                                 {navItems.map(renderNavLink)}
                                 <ThemeSwitch />
                                 <IconButton color="inherit" onMouseEnter={handleCartHover} sx={{ ml: 1 }}>
-                                    <Badge badgeContent={cartItems.length || '0'} color="secondary">
+                                    <Badge badgeContent={cartItems.length.toString()} color="secondary">
                                         <ShoppingCartIcon />
                                     </Badge>
                                 </IconButton>
@@ -124,7 +123,7 @@ const Header = () => {
                         {isMobile && (
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                 <IconButton color="inherit" onMouseEnter={handleCartHover}>
-                                    <Badge badgeContent={cartItems.length || '0'} color="secondary">
+                                    <Badge badgeContent={cartItems.length.toString()} color="secondary">
                                         <ShoppingCartIcon />
                                     </Badge>
                                 </IconButton>

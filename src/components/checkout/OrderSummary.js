@@ -3,7 +3,6 @@ import {
     TableHead, TableRow, Typography, Box,
 } from "@mui/material";
 import { useCart } from "../../contexts/CartContext";
-import { API_URL } from "../../api/axios";
 
 const OrderSummery = () => {
     const { cartItems } = useCart();

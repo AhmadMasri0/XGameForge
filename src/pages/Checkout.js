@@ -34,11 +34,20 @@ export default function CheckoutPage() {
       '.Input': {
         padding: '6px',
       },
-
     },
-
   };
-
+  const options = {
+    appearance,
+    clientSecret,
+    layout: 'accordion',
+    fields: {
+      billingDetails: {
+        name: 'never',
+        email: 'never',
+        phone: 'never',
+      },
+    }
+  }
 
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -85,17 +94,7 @@ export default function CheckoutPage() {
           <Typography variant="h6">Shipping & Payment</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {clientSecret && <Elements stripe={stripePromise} options={{
-            layout: 'accordion',
-            fields: {
-              billingDetails: {
-                name: 'never',
-                email: 'never',
-                phone: 'never',
-              },
-            }, appearance, clientSecret,
-          }} >
-
+          {clientSecret && <Elements stripe={stripePromise} options={options}>
             <CheckoutForm />
           </Elements>}
         </AccordionDetails>

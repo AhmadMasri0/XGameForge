@@ -16,7 +16,6 @@ import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useCart } from "../contexts/CartContext";
 import { Link } from "react-router-dom";
-import { API_URL } from "../api/axios";
 
 
 const Cart = () => {

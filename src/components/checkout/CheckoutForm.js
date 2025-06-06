@@ -72,31 +72,31 @@ const CheckoutForm = () => {
                 }, 2000)
                 navigate("/thank-you");
                 return;
-            }
-
-            const result = await stripe.confirmPayment({
-                elements,
-                redirect: 'if_required'
-            });
-
-            if (result.error) {
-                setError(result.error.message);
-                return;
-            }
-
-            if (result.paymentIntent.status === "succeeded") {
-                await api.post("/api/orders", {
-                    cartItems,
-                    status: 'paid',
-                    paymentIntentId: result.paymentIntent.id,
-                    paymentMethod: "stripe",
-                    totalAmount: total,
-                    orderDetail: { ...form },
+            } else if (selectedMethod === 'stripe') {
+                const result = await stripe.confirmPayment({
+                    elements,
+                    redirect: 'if_required'
                 });
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 2000)
-                navigate("/thank-you");
+
+                if (result.error) {
+                    setError(result.error.message);
+                    return;
+                }
+
+                if (result.paymentIntent.status === "succeeded") {
+                    await api.post("/api/orders", {
+                        cartItems,
+                        status: 'paid',
+                        paymentIntentId: result.paymentIntent.id,
+                        paymentMethod: "stripe",
+                        totalAmount: total,
+                        orderDetail: { ...form },
+                    });
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 2000)
+                    navigate("/thank-you");
+                }
             }
         } catch (err) {
             console.error(err);

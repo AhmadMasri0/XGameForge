@@ -1,6 +1,5 @@
-import { Box, Button, Card, CardContent, CardMedia, Chip, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Box, CardContent, Chip, Stack, Typography, useTheme } from "@mui/material";
 import { useAuth } from "../../contexts/AuthContext";
-import { API_URL } from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import AdminButton from "../common/AdminButton";
 import CustomCard from "../common/CustomCard";
@@ -21,7 +20,7 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
         </Box> : null
 
 
-    const content = <CardContent sx={{ flexGrow: 1, }} color={theme.customColors.primary}>
+    const content = <CardContent sx={{ flexGrow: 1 }} color={theme.customColors.primary}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6" fontWeight={600} sx={{
                 textOverflow: 'ellipsis',
@@ -36,8 +35,11 @@ const BarCard = ({ item, icon, deleteBarItem }) => {
                 color="primary"
             />
         </Stack>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ my: 1, }}>
             {item.description}
+        </Typography>
+        <Typography variant="h6" color={theme.customColors.primary}>
+            ${item.price.toFixed(2)}
         </Typography>
     </CardContent>
 

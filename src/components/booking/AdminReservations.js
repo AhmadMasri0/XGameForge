@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import api from "../../api/axios";
 
-const AdminReservations = ({ rerender }) => {
+const AdminReservations = ({ rerender, setRerender }) => {
     const [bookings, setBookings] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");
@@ -67,6 +67,18 @@ const AdminReservations = ({ rerender }) => {
         }));
     };
 
+    const updateReservation = async (id, isCancel = false) => {
+        const confirmed = window.confirm(`Are you sure you want to ${isCancel ? 'cancel' : 'delete'} this reservation?`);
+        if (!confirmed) return;
+        try {
+
+            const url = `/api/bookings/admin/${isCancel ? 'cancel' : 'delete'}/${id}`;
+            await api.delete(url);
+            setRerender(pre => !pre);
+        } catch (err) {
+            console.error(`Failed to ${isCancel ? 'cancel' : 'delete'}`, err);
+        }
+    }
     const paginated = filtered.slice((page - 1) * BOOKINGS_PER_PAGE, page * BOOKINGS_PER_PAGE);
 
     return (
@@ -102,7 +114,7 @@ const AdminReservations = ({ rerender }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {["username", "email", "date", "startTime", "endTime", "sessionType", "status"].map((col, i) => (
+                            {["username", "email", "date", "startTime", "endTime", "sessionType", "status", "Cancel", "Delete"].map((col, i) => (
                                 <TableCell
                                     key={i}
                                     sortDirection={sortConfig.key === col ? sortConfig.direction : false}
@@ -129,6 +141,26 @@ const AdminReservations = ({ rerender }) => {
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.endTime}</TableCell>
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.sessionType}</TableCell>
                                 <TableCell sx={{ textAlign: 'center' }}>{booking.status}</TableCell>
+                                <TableCell sx={{
+                                    textAlign: 'center',
+                                    "&:hover": {
+                                        textDecoration: booking.status === 'upcoming' ? 'underline' : 'none',
+                                        cursor: booking.status === 'upcoming' ? 'pointer' : 'auto',
+                                        color: booking.status === 'upcoming' ? 'red' : 'inherit'
+                                    }
+                                }} onClick={() => booking.status === 'upcoming' && updateReservation(booking._id, true  )}>
+                                    {booking.status === 'upcoming' ? 'Cancel' : '-'}
+                                </TableCell>
+                                <TableCell sx={{
+                                    textAlign: 'center',
+                                    "&:hover": {
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer',
+                                        color: 'red'
+                                    }
+                                }} onClick={() => updateReservation(booking._id)}>
+                                    {'Delete'}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

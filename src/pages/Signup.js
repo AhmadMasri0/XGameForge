@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AuthForm from "../components/common/AuthForm";
 import { useAuth } from "../contexts/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
     const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
     const { signup, signupMessage, user } = useAuth();
     const [submitError, setSubmitError] = useState('');
-    const location = useLocation();
     const navigate = useNavigate();
-    const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
     const [touched, setTouched] = useState({});
 
     const validate = () => {

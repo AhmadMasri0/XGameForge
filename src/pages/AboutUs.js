@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Container, Typography, Box, Grid, Paper, Divider, Stack,
 } from "@mui/material";

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container, TextField, Button, Typography,
   Grid, Paper, MenuItem
 } from '@mui/material';
-import api, { API_URL } from '../api/axios';
+import api from '../api/axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
