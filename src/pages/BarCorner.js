@@ -1,5 +1,7 @@
 import {
     Container, Typography, Grid, Box, Divider, Paper,
+    Stack,
+    CircularProgress,
 } from "@mui/material";
 import BarCard from '../components/barCorner/BarCard'
 import { useAuth } from "../contexts/AuthContext";
@@ -25,6 +27,7 @@ const BarCorner = () => {
     const [displayedItems, setDisplayedItems] = useState({});
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         for (let cat of menuItems) {
@@ -40,13 +43,16 @@ const BarCorner = () => {
 
 
     useEffect(() => {
+
         const fetchBarItems = async () => {
+            setIsLoading(true);
             try {
                 const res = await api.get('/api/bar', {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
 
-                setMenuItems(res.data)
+                setMenuItems(res.data);
+                setIsLoading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -99,7 +105,9 @@ const BarCorner = () => {
                 <AdminButton onClick={() => navigate("/bar/create")} style={{ mb: 2 }} title={'Add Item'} />
             </Container>}
 
-            {categories.map((item, i) => {
+            {isLoading ? <Stack alignItems="center" sx={{ mt: 6 }}>
+                <CircularProgress color="" />
+            </Stack> : categories.map((item, i) => {
                 if (displayedItems[item])
                     return renderMenuSection(item, icons[item], displayedItems[item]);
                 return null;

@@ -1,7 +1,8 @@
 import {
     Accordion, AccordionSummary, AccordionDetails,
     Typography, Chip, Divider, Box, Stack, Grid, Button,
-    Container
+    Container,
+    CircularProgress
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
@@ -9,12 +10,17 @@ import api from "../../api/axios";
 
 const ViewOrders = () => {
     const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchOrders = async () => {
+
+        setIsLoading(true);
         try {
             const res = await api.get("/api/orders");
             setOrders(res.data || []);
+            setIsLoading(false);
         } catch (err) {
+            setIsLoading(false);
             console.error("Error fetching orders", err);
         }
     };
@@ -35,7 +41,11 @@ const ViewOrders = () => {
         }
     };
 
-    if (orders.length === 0) {
+    if (isLoading) {
+        return <Stack alignItems="center" sx={{ mt: 6 }}>
+            <CircularProgress color="" />
+        </Stack>
+    } else if (orders.length === 0) {
         return <Typography variant="h5" mt={4} textAlign="center">
             No orders found
         </Typography>
