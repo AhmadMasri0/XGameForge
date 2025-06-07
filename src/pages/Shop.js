@@ -117,7 +117,7 @@ const Shop = () => {
                     />
                     {loading ? (
                         <Stack alignItems="center" sx={{ mt: 6 }}>
-                            <CircularProgress />
+                            <CircularProgress color=""/>
                         </Stack>
                     ) : error ? (
                         <Typography color="error" textAlign="center" sx={{ mt: 4 }}>
