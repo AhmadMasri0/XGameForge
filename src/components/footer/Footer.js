@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box, Container, Grid, Typography,
   IconButton, Button, useMediaQuery,
@@ -11,6 +10,7 @@ const Footer = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  console.log(process.env.REACT_APP_API_URL)
   return (
     <Box
       sx={{
@@ -28,7 +28,7 @@ const Footer = () => {
               XGameForge
             </Typography>
             <Typography variant="body2" color="text.secondary" width={'150px'}>
-            More than a gaming center — a social hub for gamers, coffee lovers, and tech enthusiasts.
+              More than a gaming center — a social hub for gamers, coffee lovers, and tech enthusiasts.
             </Typography>
           </Grid>
 
@@ -64,13 +64,17 @@ const Footer = () => {
               +123 456 7890
             </Typography>
             <Box mt={1}>
-              {[Facebook, X, Instagram, YouTube].map((Icon, idx) => (
+              {[{ name: Facebook, path: 'facebook' }, { name: X, path: 'x' },
+              { name: Instagram, path: 'instagram' }, { name: YouTube, path: 'youtube' }].map((Icon, idx) => (
                 <IconButton
+                  component={Link}
+                  target="_blank"
+                  to={`https://${Icon.path}.com`}
                   key={idx}
                   color="inherit"
                   sx={{ color: theme.palette.text.secondary }}
                 >
-                  <Icon />
+                  <Icon.name />
                 </IconButton>
               ))}
             </Box>
