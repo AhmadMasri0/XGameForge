@@ -34,7 +34,7 @@ const BookingPage = () => {
     ]
 
     return <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" gutterBottom>Booking and reservations</Typography>
+        <Typography variant="h4" textAlign={'center'} gutterBottom>Booking and reservations</Typography>
 
 
         {sections.map((section) => {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Container, Typography, Paper, Tabs, Tab,
+    useTheme,
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import ChangePasswordForm from '../components/profile/ChangePassword';
@@ -11,6 +12,7 @@ import AllOrders from '../components/profile/ViewAllOrders';
 const UserProfile = () => {
     const [tab, setTab] = useState(0);
     const { user } = useAuth();
+    const theme = useTheme();
 
     const handleTabChange = (_, newValue) => {
         setTab(newValue);
@@ -35,13 +37,11 @@ const UserProfile = () => {
                         }
                     }}
                 >
-                    <Tab label="Profile Details" />
-                    <Tab label="Change Password" />
-                    <Tab label="Order History" />
-                    {user?.isAdmin && <Tab label="All orders" />}
+                    <Tab label="Profile Details" sx={{ color: tab === 0 ? `${theme.customColors.activeTab} !important` : theme.customColors.inactiveTab }} />
+                    <Tab label="Change Password" sx={{ color: tab === 1 ? `${theme.customColors.activeTab} !important` : theme.customColors.inactiveTab }} />
+                    <Tab label="Order History" sx={{ color: tab === 2 ? `${theme.customColors.activeTab} !important` : theme.customColors.inactiveTab }} />
+                    {user?.isAdmin && <Tab label="All orders" sx={{ color: tab === 3 ? `${theme.customColors.activeTab} !important` : theme.customColors.inactiveTab }} />}
                 </Tabs>
-
-
                 {tab === 0 && (
                     <EditProfileForm />
                 )}

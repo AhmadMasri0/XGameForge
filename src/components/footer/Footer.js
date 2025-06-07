@@ -27,8 +27,8 @@ const Footer = () => {
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               XGameForge
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Where Gaming Meets Lifestyle
+            <Typography variant="body2" color="text.secondary" width={'150px'}>
+            More than a gaming center — a social hub for gamers, coffee lovers, and tech enthusiasts.
             </Typography>
           </Grid>
 
@@ -55,7 +55,7 @@ const Footer = () => {
 
           <Grid item xs={12} sm={6} md={3} textAlign={isMobile ? "center" : "left"}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
-              Connect
+              Contact Us
             </Typography>
             <Typography variant="body2" color="text.secondary">
               contact@xgameforge.com
@@ -78,7 +78,7 @@ const Footer = () => {
 
           <Grid item xs={12} sm={6} md={4} textAlign={isMobile ? "center" : "left"}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 700 }}>
-              Visit us
+              Visit Us
             </Typography>
             <Typography variant="body2" color="text.secondary">
               📍Rafidia Street, Nablus

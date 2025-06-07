@@ -1,5 +1,5 @@
 import {
-    Alert, Box, Button, Divider, FormControl, FormControlLabel,
+    Alert, Button, Divider, FormControl, FormControlLabel,
     FormLabel, Paper, Radio, RadioGroup, TextField, Typography
 } from "@mui/material";
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
@@ -66,30 +66,37 @@ const CheckoutForm = () => {
                     totalAmount: total,
                     orderDetail: { ...form },
                 });
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000)
                 navigate("/thank-you");
                 return;
-            }
-
-            const result = await stripe.confirmPayment({
-                elements,
-                redirect: 'if_required'
-            });
-
-            if (result.error) {
-                setError(result.error.message);
-                return;
-            }
-
-            if (result.paymentIntent.status === "succeeded") {
-                await api.post("/api/orders", {
-                    cartItems,
-                    status: 'paid',
-                    paymentIntentId: result.paymentIntent.id,
-                    paymentMethod: "stripe",
-                    totalAmount: total,
-                    orderDetail: { ...form },
+            } else if (selectedMethod === 'stripe') {
+                const result = await stripe.confirmPayment({
+                    elements,
+                    redirect: 'if_required'
                 });
-                navigate("/thank-you");
+
+                if (result.error) {
+                    setError(result.error.message);
+                    return;
+                }
+
+                if (result.paymentIntent.status === "succeeded") {
+                    await api.post("/api/orders", {
+                        cartItems,
+                        status: 'paid',
+                        paymentIntentId: result.paymentIntent.id,
+                        paymentMethod: "stripe",
+                        totalAmount: total,
+                        orderDetail: { ...form },
+                    });
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 2000)
+                    navigate("/thank-you");
+                }
             }
         } catch (err) {
             console.error(err);
@@ -102,7 +109,6 @@ const CheckoutForm = () => {
     return (
         <Paper sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom>Shipping Information</Typography>
-            {isLoading && <Typography variant="body2">Processing payment...</Typography>}
             <form onSubmit={handleSubmit} noValidate>
                 {['fullName', 'email', 'phone', 'address', 'city', 'zip'].map(field => (
                     <TextField
@@ -143,30 +149,7 @@ const CheckoutForm = () => {
                     </RadioGroup>
                 </FormControl>
 
-                {selectedMethod === "stripe" && (
-                    <Box sx={{ mt: 2 }}>
-                        <Typography variant="h6">Card Details</Typography>
-                        <Box sx={{
-                            border: "1px solid #ccc",
-                            borderRadius: 2,
-                            p: 2,
-                            mt: 1
-                        }}>
-                            <PaymentElement
-                                options={{
-                                    style: {
-                                        base: {
-                                            fontSize: "16px",
-                                            color: "#424770",
-                                            "::placeholder": { color: "#aab7c4" },
-                                        },
-                                        invalid: { color: "#9e2146" },
-                                    }
-                                }}
-                            />
-                        </Box>
-                    </Box>
-                )}
+                {selectedMethod === "stripe" && <PaymentElement />}
 
                 {error && (
                     <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -180,7 +163,7 @@ const CheckoutForm = () => {
                     sx={{ mt: 3 }}
                     disabled={isLoading}
                 >
-                    Place Order
+                    {isLoading ? 'Processing payment...' : 'Place Order'}
                 </Button>
             </form>
         </Paper>

@@ -35,11 +35,11 @@ export const AuthProvider = ({ children }) => {
       navigate(redirectTo, { replace: true });
 
     } catch (error) {
-      console.error("Signup error:", error);
-      if (error.response?.data?.message) {
+      console.error("Login error:", error);
+      if (error?.response?.data?.message) {
         return error.response.data.message;
       } else {
-        alert("Signup failed. Please try again.");
+        alert("Login failed. Please try again.");
       }
     }
   };
@@ -49,17 +49,9 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post("/api/auth/register", formData);
       const message = response.data.message;
       setSignupMessage(message);
-      // const { token, user } = response.data;
-
-      // setUser({ ...user, token });
-      // localStorage.setItem("user", JSON.stringify({ ...user, token }));
-      // api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      // navigate(redirectTo, { replace: true });
-
     } catch (error) {
       console.error("Signup error:", error);
-      if (error.response?.data?.message) {
+      if (error?.response?.data?.message) {
         return error.response.data.message;
       } else {
         alert("Signup failed. Please try again.");

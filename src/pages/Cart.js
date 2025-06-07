@@ -16,7 +16,6 @@ import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useCart } from "../contexts/CartContext";
 import { Link } from "react-router-dom";
-import { API_URL } from "../api/axios";
 
 
 const Cart = () => {
@@ -58,7 +57,7 @@ const Cart = () => {
                             >
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                     <img
-                                        src={`${API_URL}${item?.product?.images && item?.product?.images[0].url}`}
+                                        src={`${item?.product?.images && item?.product?.images[0].url}`}
                                         alt={item?.product?.name}
                                         style={{
                                             width: 80,

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container, TextField, Button, Typography,
   Grid, Paper, MenuItem
 } from '@mui/material';
-import api, { API_URL } from '../api/axios';
+import api from '../api/axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
@@ -31,7 +31,7 @@ const BarItemForm = () => {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
           setFormData({ ...res.data });
-          setPreview(`${API_URL}${res.data.image}`);
+          setPreview(`${res.data.image}`);
 
         } catch (error) {
           console.error(error);

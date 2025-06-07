@@ -1,22 +1,18 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
 
 const Logo = () => {
 
     const theme = useTheme();
 
-    return <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, }}>
-        <img src={logo} alt="logo" style={{ height: 40, marginRight: 8 }} />
+    return <Box sx={{ display: "flex", alignItems: "center", justifyContent: 'flex-start' }}>
+        <img src={'assets/logo.png'} alt="logo" style={{ height: 40, marginRight: 8 }} />
         <Typography
-            variant="h6" fontWeight={700}
-            component={Link} to="/"
+            variant="h6" fontWeight={700} component={Link} to="/"
             sx={{
-                textDecoration: "none",
-                color: "inherit",
-                '&:hover': { color: theme.customColors.activelink }
-            }}
-        >
+                textDecoration: "none", fontSize: { xs: '14px', sm: '16px' },
+                color: "inherit", '&:hover': { color: theme.customColors.activelink }
+            }}>
             XGameForge
         </Typography>
     </Box>

@@ -1,21 +1,14 @@
 import {
-    Container, Typography, Grid,
-    Button, Box, Divider, Paper,
+    Container, Typography, Grid, Box, Divider, Paper,
 } from "@mui/material";
 import BarCard from '../components/barCorner/BarCard'
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-
-import {
-    LocalCafe,
-    Fastfood,
-    LocalBar,
-    Restaurant,
-    Category
-} from '@mui/icons-material';
+import { LocalCafe, Fastfood, LocalBar, Restaurant, Category } from '@mui/icons-material';
 import MotionFade from "../components/common/MotionFade";
+import AdminButton from "../components/common/AdminButton";
 
 const icons = {
     Beverage: <LocalCafe />,
@@ -56,7 +49,6 @@ const BarCorner = () => {
                 setMenuItems(res.data)
             } catch (error) {
                 console.error(error);
-                alert('Failed to add bar item');
             }
         }
         fetchBarItems();
@@ -98,19 +90,13 @@ const BarCorner = () => {
                     🍻 GameFuel Station – Where Every Gamer Refuels
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
-                Take a break, grab a bite, and power through your next session!
+                    Take a break, grab a bite, and power through your next session!
                 </Typography>
             </Paper>
 
             <Divider sx={{ mb: 4 }} />
             {user?.isAdmin && <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
-                <Button
-                    variant="contained"
-                    onClick={() => navigate("/bar/create")}
-                    sx={{ mb: 2 }}
-                >
-                    Add Item
-                </Button>
+                <AdminButton onClick={() => navigate("/bar/create")} style={{ mb: 2 }} title={'Add Item'} />
             </Container>}
 
             {categories.map((item, i) => {

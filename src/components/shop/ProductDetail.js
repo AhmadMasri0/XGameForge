@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
     Box, Container, Typography, Button, Stack, Divider,
@@ -13,9 +13,7 @@ import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
 import ImageSlider from "./ImageSlider";
-
-
-
+import AdminButton from "../common/AdminButton";
 
 const ProductDetail = () => {
     const { productId } = useParams();
@@ -42,20 +40,6 @@ const ProductDetail = () => {
         fetchProduct();
     }, [productId]);
 
-
-    const AdminButton = ({ title, Icon, color, fun }) => {
-
-        return <Button
-            variant="contained"
-            color={color}
-            startIcon={<Icon />}
-            onClick={fun}
-            sx={{ width: '200px' }}
-        >
-            {title}
-        </Button>
-    }
-
     const handleQuantityChange = (e) => {
         let val = parseInt(e.target.value);
         if (isNaN(val)) val = 1;
@@ -66,6 +50,7 @@ const ProductDetail = () => {
 
 
     const deleteProduct = async () => {
+        console.log('d')
         const isConfirmed = window.confirm('Are you sure you want to delete this product?');
         if (!isConfirmed)
             return;
@@ -121,25 +106,27 @@ const ProductDetail = () => {
                         <Chip label={product.category} color="info" />
                         <Chip label={product.platform} color="primary" />
                     </Stack>
+                    {product.brand && <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Brand:</strong> {product.brand || "Unknown"}
+                    </Typography>}
 
                     <Typography variant="h5" color="secondary" gutterBottom>
                         ${product.price}
                     </Typography>
 
                     <Rating value={+product?.rating} readOnly precision={0.5} sx={{ mb: 2 }} />
+
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                         {product.description}
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
 
-                    <Stack direction="column    " spacing={2} alignItems="center" sx={{ mb: 3, flexWrap: 'wrap', gap: 4 }}>
+                    <Stack direction="column" spacing={2} alignItems="center" sx={{ mb: 3, flexWrap: 'wrap', gap: 4 }}>
                         <Container sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                             <TextField
-                                label="Quantity"
-                                type="number"
-                                size="small"
-                                value={quantity}
+                                label="Quantity" type="number"
+                                size="small" value={quantity}
                                 onChange={handleQuantityChange}
                                 inputProps={{ min: 1, max: 3 }}
                                 sx={{ width: 100 }}
@@ -165,8 +152,8 @@ const ProductDetail = () => {
 
                         {user?.isAdmin && <Container sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginLeft: '0 !important' }}>
 
-                            <AdminButton title={'Edit product'} Icon={EditIcon} fun={() => navigate('/products/edit/' + productId)} color='info' />
-                            <AdminButton title={'Delete product'} Icon={DeleteIcon} fun={deleteProduct} color='error' />
+                            <AdminButton title={'Edit product'} Icon={EditIcon} onClick={() => navigate('/products/edit/' + productId)} color='info' style={{ width: '200px' }} />
+                            <AdminButton title={'Delete product'} Icon={DeleteIcon} onClick={deleteProduct} color='error' style={{ width: '200px' }} />
                         </Container>}
                     </Stack>
                 </Box>

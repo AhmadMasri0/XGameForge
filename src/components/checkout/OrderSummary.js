@@ -3,7 +3,6 @@ import {
     TableHead, TableRow, Typography, Box,
 } from "@mui/material";
 import { useCart } from "../../contexts/CartContext";
-import { API_URL } from "../../api/axios";
 
 const OrderSummery = () => {
     const { cartItems } = useCart();
@@ -38,7 +37,7 @@ const OrderSummery = () => {
                                     <TableCell>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <img
-                                                src={`${API_URL}${item.product.images[0].url}`}
+                                                src={`${item.product.images[0].url}`}
                                                 alt={item.product.name}
                                                 style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 4 }}
                                             />

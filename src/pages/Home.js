@@ -1,4 +1,3 @@
-import React from "react";
 import HeroBanner from "../components/home/HeroBanner";
 import FeaturedProducts from "../components/home/FeaturedProducts";
 import BookSessionCTA from "../components/home/BookSessionCTA";

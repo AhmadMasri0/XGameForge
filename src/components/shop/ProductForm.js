@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Container, TextField, Button, Typography, Grid,
     Paper, MenuItem, Checkbox, FormControlLabel, Rating
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import api, { API_URL } from "../../api/axios";
+import api from "../../api/axios";
 import { useAuth } from "../../contexts/AuthContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
@@ -38,12 +38,21 @@ const ProductForm = () => {
     useEffect(() => {
         if (!user?.isAdmin) return navigate('/');
 
-        if (isEdit) {
-            api.get(`/api/products/${id}`).then(({ data }) => {
-                setExistingImages(data.images || []);
-                reset(data);
-            }).catch(err => console.error("Error fetching product:", err));
+        const fetchData = async () => {
+            try {
+                const res = await api.get(`/api/products/${id}`);
+                setExistingImages(res.data.images || []);
+                reset(res.data);
+            }
+            catch (err) {
+                console.error("Error fetching product:", err)
+            }
         }
+
+        if (isEdit) {
+            fetchData();
+        }
+
     }, [id, isEdit, user, reset, navigate]);
 
     const handleRemoveImage = (index) => {
@@ -107,10 +116,10 @@ const ProductForm = () => {
             const method = isEdit ? api.put : api.post;
 
             await method(endpoint, data, { headers: { "Content-Type": "multipart/form-data" } });
-            alert(isEdit ? "Product updated" : "Product created");
+            alert(isEdit ? "Product updated successfully" : "Product created successfully");
             navigate("/shop");
         } catch (err) {
-            console.error("Error submitting form", err);
+            console.error(err);
             alert("Submission failed");
         }
     };
@@ -118,7 +127,7 @@ const ProductForm = () => {
     return (
         <Container maxWidth="md">
             <Paper sx={{ p: 4, mt: 4 }}>
-                <Button startIcon={<ArrowBackIcon />} color="" onClick={() => navigate("/products/" + id)} sx={{ mb: 2 }}>
+                <Button startIcon={<ArrowBackIcon />} color="" onClick={() => navigate(id ? "/products/" + id : '/shop')} sx={{ mb: 2 }}>
                     Back
                 </Button>
                 <Typography variant="h5" mb={3}>
@@ -199,7 +208,7 @@ const ProductForm = () => {
                             <Grid container spacing={2}>
                                 {[...existingImages, ...imageFiles].map((img, idx) => {
                                     const isNew = idx >= existingImages.length;
-                                    const src = isNew ? URL.createObjectURL(img) : `${API_URL}${img.url}`;
+                                    const src = isNew ? URL.createObjectURL(img) : `${img.url}`;
                                     return (
                                         <Grid item xs={4} key={idx}>
                                             <img src={src} alt="Preview" style={{ width: '100%', height: 150, objectFit: 'contain', borderRadius: 8 }} />

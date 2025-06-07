@@ -3,7 +3,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 export const ColorModeContext = createContext({
-  toggleColorMode: () => {},
+  toggleColorMode: () => { },
+  mode: 'light'
 });
 
 const getTheme = (mode) => ({
@@ -23,6 +24,8 @@ const getTheme = (mode) => ({
     activelink: "#b8822c",
     inactivelink: mode === "light" ? "#1a1a1a" : "#ffffff",
     primary: mode === "light" ? "#1a1a1a" : "#ffffff",
+    activeTab: mode === 'light' ? 'black' : '#b8822c',
+    inactiveTab: 'gray',
   },
   typography: {
     fontFamily: `'Poppins', sans-serif`,
@@ -37,12 +40,13 @@ export default function ThemeContextProvider({ children }) {
   const colorMode = useMemo(() => ({
     toggleColorMode: () => {
       setMode((prevMode) => {
-        const nextMode = prevMode === "dark" ? "light" : 'dark';
+        const nextMode = prevMode === "dark" ? "light" : "dark";
         localStorage.setItem("themeMode", nextMode);
         return nextMode;
       });
     },
-  }), []);
+    mode,
+  }), [mode]);
 
   const theme = useMemo(() => createTheme(getTheme(mode)), [mode]);
 

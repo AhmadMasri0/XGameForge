@@ -1,7 +1,5 @@
 import { Box } from "@mui/material";
 import Slider from "react-slick";
-import { API_URL } from "../../api/axios";
-import { useTheme } from "@emotion/react";
 import './Arrow.css'
 
 function Arrow(props) {
@@ -19,8 +17,6 @@ function Arrow(props) {
 
 const ImageSlider = ({ product }) => {
 
-    const theme = useTheme();
-
     const sliderSettings = {
         dots: true,
         infinite: product?.images?.length > 1,
@@ -35,10 +31,8 @@ const ImageSlider = ({ product }) => {
         <Slider {...sliderSettings}>
             {product?.images?.map((img, index) => (
                 <Box
-                    key={index}
-                    component="img"
-                    src={API_URL + img.url}
-                    alt={img.url}
+                    key={index} component="img"
+                    src={img.url} alt={product.name}
                     sx={{
                         height: 400,
                         width: "100%",

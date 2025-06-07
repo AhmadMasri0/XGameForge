@@ -9,14 +9,16 @@ import {
   InputAdornment,
   Link as MuiLink,
   Alert,
+  useTheme,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, signupMessage }) => {
+const AuthForm = ({ type, onSubmit, formData, setFormData,
+  errors, submitError, signupMessage, touched, setTouched }) => {
   const isSignup = type === "signup";
   const [showPassword, setShowPassword] = useState(false);
-
+  const theme = useTheme();
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -30,6 +32,11 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
       onSubmit();
     }
   }
+
+  const handleBlur = (e) => {
+    setTouched(prev => ({ ...prev, [e.target.name]: true }));
+  };
+
   const isDisabled =
     Object.values(errors).some(error => error) ||
     Object.values(formData).some(value => !value);
@@ -57,7 +64,9 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
             name="username"
             value={formData.username || ""}
             onChange={handleChange}
+            onKeyDown={keyTrigger}
             error={!!errors.username}
+            onBlur={handleBlur}
             helperText={errors.username}
             fullWidth
           />
@@ -68,7 +77,9 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
           type="email"
           value={formData.email}
           onChange={handleChange}
+          onKeyDown={keyTrigger}
           error={!!errors.email}
+          onBlur={handleBlur}
           helperText={errors.email}
           fullWidth
         />
@@ -79,6 +90,7 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
           value={formData.password}
           onChange={handleChange}
           error={!!errors.password}
+          onBlur={handleBlur}
           helperText={errors.password}
           onKeyDown={keyTrigger}
           fullWidth
@@ -108,14 +120,14 @@ const AuthForm = ({ type, onSubmit, formData, setFormData, errors, submitError, 
           {isSignup ? (
             <>
               Already have an account?{" "}
-              <MuiLink component={Link} to="/login" underline="hover">
+              <MuiLink component={Link} to="/login" underline="hover" color={theme.customColors.primary}>
                 Login
               </MuiLink>
             </>
           ) : (
             <>
               Don’t have an account?{" "}
-              <MuiLink component={Link} to="/signup" underline="hover">
+              <MuiLink component={Link} to="/signup" underline="hover" color={theme.customColors.primary}>
                 Sign Up
               </MuiLink>
             </>

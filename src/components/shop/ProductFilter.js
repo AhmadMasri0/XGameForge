@@ -13,10 +13,29 @@ import DevicesIcon from "@mui/icons-material/Devices";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const ProductFilter = ({ filters, onFilterChange, searchQuery, handleSearchChange }) => {
+
+
     const handleChange = (field) => (event) => {
         onFilterChange({ ...filters, [field]: event.target.value });
     };
 
+    const CustomSelect = ({ title, value, label, name, list, Icon, style }) => {
+
+        return <Grid item xs={12} sx={{ width: { xs: '100%', sm: '30%', maxWidth: '180px' }, ...style }}>
+            <FormControl fullWidth>
+                <InputLabel>
+                    {Icon} {title}
+                </InputLabel>
+                <Select
+                    value={value}
+                    label={label}
+                    onChange={handleChange(name)}
+                >
+                    {list.map((item) => <MenuItem value={item.value} > {item.title}</MenuItem>)}
+                </Select>
+            </FormControl>
+        </Grid>;
+    }
     return (
         <Box component="form" noValidate autoComplete="off">
             <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
@@ -33,56 +52,28 @@ const ProductFilter = ({ filters, onFilterChange, searchQuery, handleSearchChang
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12} sx={{ width: { xs: '100%', sm: '30%', maxWidth: '180px' } }}>
-                    <FormControl fullWidth>
-                        <InputLabel><SportsEsportsIcon fontSize="small" /> Category</InputLabel>
-                        <Select
-                            value={filters.category}
-                            label="Category"
-                            onChange={handleChange("category")}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="Game">Games</MenuItem>
-                            <MenuItem value="Accessory">Accessories</MenuItem>
-                            <MenuItem value="Console">Consoles</MenuItem>
-                            <MenuItem value="Other">Others</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-
-
-                <Grid item xs={12} sx={{ width: { xs: '100%', sm: '30%', maxWidth: '180px' } }}>
-                    <FormControl fullWidth>
-                        <InputLabel><DevicesIcon fontSize="small" /> Platform</InputLabel>
-                        <Select
-                            value={filters.platform}
-                            label="Platform"
-                            onChange={handleChange("platform")}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="PS5">PS5</MenuItem>
-                            <MenuItem value="PC">PC</MenuItem>
-                            <MenuItem value="XBox">Xbox</MenuItem>
-                            <MenuItem value="Other">Others</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-
-
-                <Grid item xs={12} sx={{ width: { xs: '100%', sm: '30%', maxWidth: '180px', marginBottom: '15px' } }}>
-                    <FormControl fullWidth>
-                        <InputLabel><AttachMoneyIcon fontSize="small" /> Price</InputLabel>
-                        <Select
-                            value={filters.price}
-                            label="Price"
-                            onChange={handleChange("price")}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="low">Low to High</MenuItem>
-                            <MenuItem value="high">High to Low</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
+                <CustomSelect
+                    label={'Category'} name={'category'} value={filters.category} title={'Category'}
+                    Icon={<SportsEsportsIcon fontSize="small" />}
+                    list={[{ value: '', title: 'All' }, { value: 'Game', title: 'Games' },
+                    { value: 'Accessory', title: 'Accessories' }, { value: 'Console', title: 'Consoles' },
+                    { value: 'Other', title: 'Others' }
+                    ]}
+                />
+                <CustomSelect
+                    label={'Platform'} name={'platform'} value={filters.platform} title={'Platform'}
+                    Icon={<DevicesIcon fontSize="small" />}
+                    list={[{ value: '', title: 'All' }, { value: 'PS5', title: 'PS5' },
+                    { value: 'PC', title: 'PC' }, { value: 'XBox', title: 'XBox' },
+                    { value: 'Other', title: 'Others' }
+                    ]}
+                />
+                <CustomSelect
+                    label={'Price'} name={'price'} value={filters.price} title={'Price'}
+                    Icon={<AttachMoneyIcon fontSize="small" />}
+                    list={[{ value: '', title: 'All' }, { value: 'low', title: 'Low to High' },
+                    { value: 'high', title: 'High to Low' }]} style={{ marginBottom: '20px' }}
+                />
             </Grid>
         </Box>
     );

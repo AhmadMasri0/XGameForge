@@ -1,7 +1,5 @@
 import { Box, Typography, Button, useTheme } from "@mui/material";
-import heroImage from "../../assets/hero1.png";
 import { Link } from "react-router-dom";
-import MotionFade from "../common/MotionFade";
 
 const HeroBanner = () => {
     const theme = useTheme();
@@ -9,8 +7,8 @@ const HeroBanner = () => {
     return (
         <Box
             sx={{
-                height: { xs: "60vh", md: "80vh" },
-                backgroundImage: `url(${heroImage})`,
+                height: "100vh",
+                backgroundImage: `url(${'assets/hero1.png'})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 display: "flex",
@@ -21,7 +19,6 @@ const HeroBanner = () => {
                 textAlign: "center",
             }}
         >
-            {/* <MotionFade> */}
             <Box sx={{
                 backgroundColor: "rgba(254, 250, 250, 0.14)",
                 p: 4, borderRadius: 2
@@ -44,7 +41,6 @@ const HeroBanner = () => {
                     Book a Session
                 </Button>
             </Box>
-            {/* </MotionFade> */}
         </Box>
     );
 };

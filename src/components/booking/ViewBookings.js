@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Container, Typography, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, TablePagination, Tabs, Tab, Chip
@@ -9,7 +9,7 @@ import utc from 'dayjs/plugin/utc';
 
 const rowsPerPage = 5;
 
-const MyBookings = ({ rerender }) => {
+const MyBookings = ({ rerender, setRerender }) => {
     dayjs.extend(utc)
     const [bookings, setBookings] = useState([]);
     const [filtered, setFiltered] = useState([]);
@@ -41,14 +41,16 @@ const MyBookings = ({ rerender }) => {
         const confirmed = window.confirm("Are you sure you want to cancel this reservation?");
         if (!confirmed) return;
         try {
-            await api.delete(`/api/bookings/${id}`);
+            await api.delete(`/api/bookings/cancel/${id}`);
             setBookings(prev =>
                 prev.map(b => b._id === id ? { ...b, status: "cancelled" } : b)
             );
+            setRerender(pre => !pre)
         } catch (err) {
             console.error("Failed to cancel", err);
         }
     };
+
 
     const getStatusChip = (status) => {
         const color = status === "cancelled" ? "default"

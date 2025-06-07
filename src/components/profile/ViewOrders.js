@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-import api, { API_URL } from "../../api/axios";
+import api from "../../api/axios";
 
 const ViewOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -96,7 +96,7 @@ const ViewOrders = () => {
                                     {order.items.map((item, idx) => (
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} key={idx}>
                                             <img
-                                                src={`${API_URL}${item?.product?.images[0]?.url}`}
+                                                src={`${item?.product?.images[0]?.url}`}
                                                 alt={item.product.name}
                                                 style={{ width: 40, height: 40, objectFit: 'contain', borderRadius: 4 }}
                                             />
