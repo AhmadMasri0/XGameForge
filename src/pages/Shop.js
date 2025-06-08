@@ -93,7 +93,8 @@ const Shop = () => {
             <Grid container spacing={4}>
                 <Grid item xs={12} md={9} sx={{ width: "100%" }}>
                     <Box sx={{ mb: 4, textAlign: "center" }}>
-                        <Typography variant="h3" fontWeight={700} gutterBottom>
+                        <Typography variant="h3" fontWeight={700} gutterBottom
+                            sx={{ fontSize: { xs: '26px', md: '40px' } }}>
                             Explore Our Shop
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary">
@@ -105,7 +106,7 @@ const Shop = () => {
 
                     {user?.isAdmin && (
                         <Container sx={{ justifyContent: 'flex-end', display: 'flex' }}>
-                            <AdminButton title={'Add product'} onClick={() => navigate('/products/create')}/>
+                            <AdminButton title={'Add product'} onClick={() => navigate('/products/create')} />
                         </Container>
                     )}
 
@@ -117,7 +118,7 @@ const Shop = () => {
                     />
                     {loading ? (
                         <Stack alignItems="center" sx={{ mt: 6 }}>
-                            <CircularProgress />
+                            <CircularProgress color=""/>
                         </Stack>
                     ) : error ? (
                         <Typography color="error" textAlign="center" sx={{ mt: 4 }}>

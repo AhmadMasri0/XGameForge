@@ -1,5 +1,4 @@
 import { Card, CardMedia, useTheme } from "@mui/material";
-import MotionFade from "./MotionFade";
 import { Link } from "react-router-dom";
 
 const CustomCard = ({ path, Buttons, content, imgSrc, imgAlt }) => {
@@ -8,8 +7,7 @@ const CustomCard = ({ path, Buttons, content, imgSrc, imgAlt }) => {
     return <Card
         sx={{
             height: "auto",
-            width: { xs: '80%', sm: '250px' },
-            maxWidth: '250px',
+            width: { xs:  '250px' },
             display: "flex",
             flexDirection: "column",
             justifyContent: 'space-between',

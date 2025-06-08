@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   Button,
@@ -15,7 +15,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const AuthForm = ({ type, onSubmit, formData, setFormData,
-  errors, submitError, signupMessage, touched, setTouched }) => {
+  errors, submitError, signupMessage, setTouched }) => {
   const isSignup = type === "signup";
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();

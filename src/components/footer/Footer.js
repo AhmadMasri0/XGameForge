@@ -10,7 +10,6 @@ const Footer = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  console.log(process.env.REACT_APP_API_URL)
   return (
     <Box
       sx={{

@@ -92,7 +92,8 @@ const BarCorner = () => {
     return (
         <Container maxWidth="lg" sx={{ my: 6 }}>
             <Paper elevation={2} sx={{ p: 4, textAlign: "center", mb: 6 }}>
-                <Typography variant="h3" fontWeight={700} gutterBottom>
+                <Typography variant="h3" fontWeight={700} gutterBottom
+                    sx={{ fontSize: { xs: '26px', md: '40px' } }}>
                     🍻 GameFuel Station – Where Every Gamer Refuels
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
