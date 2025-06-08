@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
     Container, Typography, Accordion,
     AccordionSummary, AccordionDetails
@@ -34,7 +34,13 @@ const BookingPage = () => {
     ]
 
     return <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" textAlign={'center'} gutterBottom>Booking and reservations</Typography>
+        <Typography variant="h4" textAlign="center" gutterBottom>
+            Book Your Gaming Experience – Seamless Reservations Await!
+        </Typography>
+        <Typography variant="subtitle1" textAlign="center" color="textSecondary" sx={{ mb: 3 }}>
+            Secure your spot for an immersive console or VR session. Plan ahead and avoid the wait – it's fast, easy, and flexible.
+        </Typography>
+
 
 
         {sections.map((section) => {
