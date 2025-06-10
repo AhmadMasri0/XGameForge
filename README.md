@@ -79,7 +79,9 @@ XGameForge/
 ### **Clone & Run Locally**
 
 git clone https://github.com/AhmadMasri0/XGameForge.git
+
 npm install
+
 npm start
 
 📦 Deployment
@@ -95,6 +97,7 @@ npm start
 - S3 bucket permissions controlled via IAM policies
 
 📧 Test Instructions
+
   Use a valid email to register. For test payments, use:
 
 - Card Number: 4242 4242 4242 4242
