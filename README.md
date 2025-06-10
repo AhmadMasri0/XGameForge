@@ -74,9 +74,9 @@ XGameForge/
 ├── .env            # Environment variables
 └── README.md
 ```
-### 🚀 **Getting Started**
+## 🚀 **Getting Started**
 
-## **Clone & Run Locally**
+### **Clone & Run Locally**
 
 git clone https://github.com/AhmadMasri0/XGameForge.git
 npm install
