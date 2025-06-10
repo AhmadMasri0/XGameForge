@@ -83,19 +83,19 @@ npm install
 npm start
 
 📦 Deployment
-Frontend: Upload build/ from React to AWS S3 bucket and serve via CloudFront
-Backend: Deploy Express server files to AWS Elastic Beanstalk
-MongoDB: Hosted on MongoDB Atlas
-DNS: Custom domains via Route 53 + SSL using ACM
+- Frontend: Upload build/ from React to AWS S3 bucket and serve via CloudFront
+- Backend: Deploy Express server files to AWS Elastic Beanstalk
+- MongoDB: Hosted on MongoDB Atlas
+- DNS: Custom domains via Route 53 + SSL using ACM
 
 🔒 Security Practices
-All API routes are secured with JWT and role-based access
-HTTPS is enforced using a load balancer (ALB)
-Environment variables stored securely in .env
-S3 bucket permissions controlled via IAM policies
+- All API routes are secured with JWT and role-based access
+- HTTPS is enforced using a load balancer (ALB)
+- Environment variables stored securely in .env
+- S3 bucket permissions controlled via IAM policies
 
 📧 Test Instructions
-Use a valid email to register. For test payments, use:
+  Use a valid email to register. For test payments, use:
 
 - Card Number: 4242 4242 4242 4242
 - Expiry: any future date
