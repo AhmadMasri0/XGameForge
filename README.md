@@ -63,14 +63,6 @@ XGameForge/
 │       ├── pages/
 │       ├── components/
 │       └── contexts/
-│
-├── server/         # Node.js backend
-│   ├── controllers/
-│   ├── routes/
-│   ├── models/
-│   ├── middlewares/
-│   └── utils/
-│
 ├── .env            # Environment variables
 └── README.md
 ```
