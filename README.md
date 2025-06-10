@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# 🎮 XGameForge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**XGameForge** is a full-stack web application designed to manage and streamline a gaming center’s operations. It supports online reservations, e-commerce, and bar/café item browsing—built with the **MERN** stack and deployed on **AWS** infrastructure.
 
-## Available Scripts
+### 🌐 Live Demo
+🔗 [https://xgameforge.com](https://xgameforge.com)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🧩 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 👥 User Interface
+- Browse and purchase gaming-related products
+- Book gaming sessions (VR, Console, PlayStation, etc.)
+- Explore the **GameFuel** café menu
+- Authentication: sign up/login with secure JWT-based auth
+- View profile, edit details, and manage past orders/bookings
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🔐 Admin Permissions
+Admins have elevated privileges using the same UI:
+- Add/Edit/Delete:
+  - 🛍️ Products (Games, Consoles, Accessories, etc.)
+  - 🍔 Bar items (GameFuel menu)
+  - 🎮 Booking sessions
+- Manage:
+  - 📦 Orders (mark as delivered or cancel)
+  - 📅 Reservations (view, filter, update status)
+- View customer details, control inventory and more
 
-### `npm test`
+### 💳 Stripe Payment
+- Integrated Stripe Payments (with PaymentIntent API)
+- Orders are only saved upon successful payment
+- Supports **cash on delivery** as well
+- Test card: `4242 4242 4242 4242`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🛠️ Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend:
+- **React** + **Material UI**
+- **React Router** + **Framer Motion**
+- Hosted on **AWS S3** + **CloudFront**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Backend:
+- **Node.js**, **Express.js**, **MongoDB Atlas**
+- **Stripe** API for payments
+- **Express-session**, JWT for auth
+- Deployed with **AWS Elastic Beanstalk**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Storage:
+- Images uploaded to **AWS S3**
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📁 Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+XGameForge/
+│
+├── client/         # React frontend
+│   └── src/
+│       ├── pages/
+│       ├── components/
+│       └── contexts/
+│
+├── server/         # Node.js backend
+│   ├── controllers/
+│   ├── routes/
+│   ├── models/
+│   ├── middlewares/
+│   └── utils/
+│
+├── .env            # Environment variables
+└── README.md
+```
+### 🚀 **Getting Started**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## **Clone & Run Locally**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+git clone https://github.com/AhmadMasri0/XGameForge.git
+npm install
+npm start
 
-## Learn More
+📦 Deployment
+Frontend: Upload build/ from React to AWS S3 bucket and serve via CloudFront
+Backend: Deploy Express server files to AWS Elastic Beanstalk
+MongoDB: Hosted on MongoDB Atlas
+DNS: Custom domains via Route 53 + SSL using ACM
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+🔒 Security Practices
+All API routes are secured with JWT and role-based access
+HTTPS is enforced using a load balancer (ALB)
+Environment variables stored securely in .env
+S3 bucket permissions controlled via IAM policies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+📧 Test Instructions
+Use a valid email to register. For test payments, use:
 
-### Code Splitting
+- Card Number: 4242 4242 4242 4242
+- Expiry: any future date
+- CVC: any 3 digits
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
