@@ -37,6 +37,11 @@
     "eject": "react-scripts eject",
     "cy:open": "cypress open"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)/"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
