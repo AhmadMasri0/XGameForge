@@ -37,22 +37,7 @@
     "eject": "react-scripts eject",
     "cy:open": "cypress open"
   },
-  "jest": {
-  "reporters": [
-    "default",
-    [
-      "jest-sonar-reporter",
-      {
-        "outputDirectory": "coverage",
-        "outputName": "test-report.xml",
-        "reportedFilePath": "absolute"
-      }
-    ]
-  ],
-  "collectCoverage": true,
-  "coverageReporters": ["lcov", "text", "cobertura"]
-}
-,
+
   "eslintConfig": {
     "extends": [
       "react-app",
