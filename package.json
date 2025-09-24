@@ -34,7 +34,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cy:open": "cypress open"
+  },
+  "jest": {
+    "testResultsProcessor": "jest-sonar-reporter"
   },
   "eslintConfig": {
     "extends": [
@@ -53,5 +57,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^15.0.0",
+    "jest-sonar-reporter": "^2.0.0"
   }
 }
